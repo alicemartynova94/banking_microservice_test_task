@@ -3,6 +3,8 @@ package com.banking.banking_microservice_test_task.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Entity
 @Table(schema = "bank_mic", name = "currency_shortname")
 @Data
