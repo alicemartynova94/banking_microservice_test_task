@@ -6,12 +6,11 @@ import lombok.Data;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "bank_mic", name = "currency_shortname")
 @Data
 public class CurrencyShortname {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @Column(name = "currency_name_numb")
     private Short currencyNameNumeric;
 }
