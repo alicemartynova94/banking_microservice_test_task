@@ -7,7 +7,6 @@ import java.util.UUID;
 
 
 @Entity
-@Table(schema = "bank_mic", name = "bank_account")
 @Data
 public class BankAccount {
     @Id
