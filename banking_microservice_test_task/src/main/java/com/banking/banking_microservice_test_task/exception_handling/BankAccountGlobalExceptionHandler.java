@@ -1,29 +1,20 @@
 package com.banking.banking_microservice_test_task.exception_handling;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class BankAccountGlobalExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger(BankAccountGlobalExceptionHandler.class);
+@Slf4j
+public class BankAccountGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler
-    public ResponseEntity<BankAccountIncorrectData> handleException(NoSuchBankAccountException exception) {
-        logger.error("Such bank account does not exist: {}", exception.getMessage());
-        BankAccountIncorrectData bankAccountIncorrectData = new BankAccountIncorrectData();
-        bankAccountIncorrectData.setInfo(exception.getMessage());
-        return new ResponseEntity<>(bankAccountIncorrectData, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(NoSuchBankAccountException.class)
+    protected ResponseEntity<Object> handleNoSuchBankAccountException() {
+        log.error("There is no bank account with such id");
+        return new ResponseEntity<>(new BankAccountIncorrectData(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<BankAccountIncorrectData> handleException(Exception exception) {
-        logger.error("An error occurred: {}", exception.getMessage());
-        BankAccountIncorrectData bankAccountIncorrectData = new BankAccountIncorrectData();
-        bankAccountIncorrectData.setInfo(exception.getMessage());
-        return new ResponseEntity<>(bankAccountIncorrectData, HttpStatus.BAD_REQUEST);
-    }
 }
