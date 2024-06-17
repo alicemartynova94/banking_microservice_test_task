@@ -19,7 +19,7 @@ public class BankAccount {
     @Column(name = "available_funds")
     private Double availableFunds;
     @PrimaryKeyJoinColumn(name = "currency_shortname")
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id")
     private CurrencyShortname currencyShortname;
 }
