@@ -1,6 +1,5 @@
 package com.banking.banking_microservice_test_task.exception_handling;
 
-import com.banking.banking_microservice_test_task.entity.BankAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
