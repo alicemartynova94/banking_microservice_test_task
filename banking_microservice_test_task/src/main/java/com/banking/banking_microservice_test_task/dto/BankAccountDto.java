@@ -18,5 +18,5 @@ public class BankAccountDto {
     private Integer accountNumber;
     private String accountHolder;
     private Double availableFunds;
-    private CurrencyShortnameDto currencyShortnameDto;
+    private CurrencyShortnameDto currencyShortname;
 }
