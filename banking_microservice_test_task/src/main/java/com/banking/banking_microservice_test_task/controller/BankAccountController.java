@@ -1,5 +1,6 @@
 package com.banking.banking_microservice_test_task.controller;
 
+import com.banking.banking_microservice_test_task.dto.BankAccountDto;
 import com.banking.banking_microservice_test_task.entity.BankAccount;
 import com.banking.banking_microservice_test_task.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ public class BankAccountController {
     private BankAccountService bankAccountService;
 
     @GetMapping("/account/{id}")
-    public BankAccount getAccount(@PathVariable UUID id) {
+    public BankAccountDto getAccount(@PathVariable UUID id) {
         return bankAccountService.getAccount(id);
     }
 
     @PostMapping("/accounts")
-    public BankAccount addNewAccount(@RequestBody BankAccount bankAccount) {
-        bankAccountService.saveAccount(bankAccount);
-        return bankAccount;
+    public BankAccountDto addNewAccount(@RequestBody BankAccountDto bankAccountDto) {
+        bankAccountService.saveAccount(bankAccountDto);
+        return bankAccountDto;
     }
 
     @DeleteMapping("/account/{id}")
