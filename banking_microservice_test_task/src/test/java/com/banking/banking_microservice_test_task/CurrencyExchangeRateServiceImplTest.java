@@ -52,7 +52,7 @@ public class CurrencyExchangeRateServiceImplTest {
     }
 
     @Test
-    public void getExchangeRateDataExpectReturn() {
+    public void getExchangeRateDataExpectValidExchangeRate() {
         given(properties.getBaseUrl()).willReturn(baseUrl);
         given(properties.getInterval()).willReturn(interval);
         given(properties.getApiKey()).willReturn(apiKey);
