@@ -24,16 +24,12 @@ import static org.mockito.Mockito.verify;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class BankAccountServiceImplTest {
-    @Autowired
-    private MockMvc mockMvc;
     @InjectMocks
     private BankAccountServiceImpl bankAccountService;
     @Mock
@@ -51,16 +47,32 @@ public class BankAccountServiceImplTest {
         UUID currencyId = UUID.randomUUID();
         Short currencyName = (short) 1;
 
-        CurrencyShortnameDto currencyShortnameDto = new CurrencyShortnameDto(currencyId, currencyName);
-        CurrencyShortname currencyShortname = new CurrencyShortname(currencyId, currencyName);
+        CurrencyShortnameDto currencyShortnameDto = new CurrencyShortnameDto();
+        currencyShortnameDto.setId(currencyId);
+        currencyShortnameDto.setCurrencyNameNumeric(currencyName);
+
+        CurrencyShortname currencyShortname = new CurrencyShortname();
+        currencyShortname.setId(currencyId);
+        currencyShortname.setCurrencyNameNumeric(currencyName);
 
         accountId = UUID.randomUUID();
         Integer accountNumber = 1111111;
         String accountHolder = "Smirnov Dmitry";
         Double availableFunds = 0.0;
 
-        bankAccountDto = new BankAccountDto(accountId, accountNumber, accountHolder, availableFunds, currencyShortnameDto);
-        bankAccount = new BankAccount(accountId, accountNumber, accountHolder, availableFunds, currencyShortname);
+        bankAccountDto = new BankAccountDto();
+        bankAccountDto.setId(accountId);
+        bankAccountDto.setAccountNumber(accountNumber);
+        bankAccountDto.setAccountHolder(accountHolder);
+        bankAccountDto.setAvailableFunds(availableFunds);
+        bankAccountDto.setCurrencyShortname(currencyShortnameDto);
+
+        bankAccount = new BankAccount();
+        bankAccount.setId(accountId);
+        bankAccount.setAccountNumber(accountNumber);
+        bankAccount.setAccountHolder(accountHolder);
+        bankAccount.setAvailableFunds(availableFunds);
+        bankAccount.setCurrencyShortname(currencyShortname);
     }
 
     @Test
