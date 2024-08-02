@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Entity
 @Data
-@AllArgsConstructor
 public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

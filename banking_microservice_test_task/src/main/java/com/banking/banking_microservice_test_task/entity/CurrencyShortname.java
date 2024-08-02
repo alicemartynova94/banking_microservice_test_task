@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Entity
 @Data
-@AllArgsConstructor
 public class CurrencyShortname {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
