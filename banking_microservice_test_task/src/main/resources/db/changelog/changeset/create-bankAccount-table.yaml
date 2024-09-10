@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-bank-account
+      author: alicemartynova94
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: bank_account
+      changes:
+        - createTable:
+            tableName: bank_account
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_number
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_holder
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: available_funds
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency_shortname_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: bank_account
+            baseColumnNames: currency_shortname_id
+            referencedTableName: currency_shortname
+            referencedColumnNames: id
+            constraintName: bank_account_currency_shortname_id_cm
+            onDelete: cascade
+            onUpdate: cascade
