@@ -17,4 +17,6 @@ public class CurrencyExchangeRateServiceProperties {
     private String baseUrl;
     @NotBlank(message = "Interval key field cannot be Blank!")
     private String interval;
+    @NotBlank(message = "Cron cannot be Blank!")
+    private String cron;
 }
