@@ -12,6 +12,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class CurrencyExchangeRateServiceImpl implements CurrencyExchangeRateService {
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     private CurrencyExchangeRateServiceProperties properties;
@@ -23,8 +25,6 @@ public class CurrencyExchangeRateServiceImpl implements CurrencyExchangeRateServ
                 .queryParam("interval", properties.getInterval())
                 .queryParam("apikey", properties.getApiKey())
                 .build();
-
-        RestTemplate restTemplate = new RestTemplate();
 
         return restTemplate.getForObject(builder.toUriString(), CurrencyExchangeRate.class);
     }
