@@ -20,4 +20,6 @@ public class TransactionDto {
     private String expenseCategory;
     private Boolean transactionStatus;
     private Boolean limitExceeded;
+    private BankAccountDto account;
+    private CurrencyShortnameDto currencyShortname;
 }
