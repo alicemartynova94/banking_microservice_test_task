@@ -22,4 +22,6 @@ public class BankAccount {
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id")
     private CurrencyShortname currencyShortname;
+    @OneToOne(mappedBy = "account", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Limit limit;
 }
