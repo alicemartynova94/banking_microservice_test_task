@@ -4,7 +4,7 @@ import com.banking.banking_microservice_test_task.dto.TransactionDto;
 import com.banking.banking_microservice_test_task.entity.Transaction;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {BankAccountMapper.class, CurrencyShortnameMapper.class})
 public interface TransactionMapper {
 
     Transaction TransactionDtoToTransaction(TransactionDto dto);
