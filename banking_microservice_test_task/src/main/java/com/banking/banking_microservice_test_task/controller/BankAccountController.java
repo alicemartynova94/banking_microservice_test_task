@@ -1,7 +1,6 @@
 package com.banking.banking_microservice_test_task.controller;
 
 import com.banking.banking_microservice_test_task.dto.BankAccountDto;
-import com.banking.banking_microservice_test_task.entity.BankAccount;
 import com.banking.banking_microservice_test_task.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
