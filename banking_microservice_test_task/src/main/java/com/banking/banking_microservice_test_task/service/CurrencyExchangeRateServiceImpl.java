@@ -3,7 +3,6 @@ package com.banking.banking_microservice_test_task.service;
 import com.banking.banking_microservice_test_task.entity.CurrencyExchangeRate;
 import com.banking.banking_microservice_test_task.properties.CurrencyExchangeRateServiceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
