@@ -24,6 +24,7 @@ public class CurrencyExchangeRateServicePropertiesTest {
         properties.setApiKey("e1677ba07b6c475fa2a42e7402131fe2");
         properties.setBaseUrl("https://api.twelvedata.com/quote");
         properties.setInterval("30");
+        properties.setCron("0 0 0 * * *");
 
         var errors = validator.validate(properties);
 
@@ -37,9 +38,10 @@ public class CurrencyExchangeRateServicePropertiesTest {
         properties.setApiKey("");
         properties.setBaseUrl("");
         properties.setInterval("");
+        properties.setCron("");
 
         var errors = validator.validate(properties);
-        Assertions.assertEquals(3, errors.size());
+        Assertions.assertEquals(4, errors.size());
 
 
         for (ConstraintViolation<CurrencyExchangeRateServiceProperties> violation : errors) {
