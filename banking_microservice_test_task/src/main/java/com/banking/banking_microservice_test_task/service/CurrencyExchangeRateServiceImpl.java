@@ -29,7 +29,7 @@ public class CurrencyExchangeRateServiceImpl implements CurrencyExchangeRateServ
     }
 
     @Scheduled(cron = "#{@currencyExchangeRateServiceProperties.cron}")
-    public void getExchangeRateDataScheduler(){
+    public void getExchangeRateDataScheduler() {
         getExchangeRateData("KZT/USD");
         getExchangeRateData("RUB/USD");
     }
