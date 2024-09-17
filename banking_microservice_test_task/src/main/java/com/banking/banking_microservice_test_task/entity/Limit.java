@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -21,18 +20,12 @@ public class Limit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     @Column(name = "limit_sum")
     private Double limitSum;
-    @CreationTimestamp
-    @Column(name = "limit_creation_time")
-    private LocalDateTime limitCreationTime;
     @UpdateTimestamp
     @Column(name = "limit_last_update_time")
     private LocalDateTime limitLastUpdateTime;
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "account_id")
-    private BankAccount account;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "currency_id")
     private CurrencyShortname currencyShortname;
