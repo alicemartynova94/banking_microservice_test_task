@@ -16,8 +16,6 @@ public class LimitDto {
 
     private UUID id;
     private Double limitSum;
-    private LocalDateTime limitCreationTime;
     private LocalDateTime limitLastUpdateTime;
-    private BankAccountDto account;
     private CurrencyShortnameDto currencyShortname;
 }
