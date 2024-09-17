@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-bankAccount-table.yaml
+  - include:
+      file: db/changelog/changeset/create-currencyShortname-table.yaml
