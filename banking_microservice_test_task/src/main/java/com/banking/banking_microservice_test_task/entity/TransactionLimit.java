@@ -24,7 +24,7 @@ public class TransactionLimit {
     @Column(name = "limit_sum")
     private Double limitSum;
     @UpdateTimestamp
-    @Column(name = "limit_last_update_time")
+    @Column(name = "limit_last_update_time", updatable = false, insertable = false)
     private LocalDateTime limitLastUpdateTime;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "currency_id")
