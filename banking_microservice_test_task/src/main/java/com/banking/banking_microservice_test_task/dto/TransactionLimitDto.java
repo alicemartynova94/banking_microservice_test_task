@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LimitDto {
+public class TransactionLimitDto {
 
     private UUID id;
     private Double limitSum;
