@@ -1,6 +1,13 @@
 package com.banking.banking_microservice_test_task.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 import java.util.UUID;
@@ -18,10 +25,10 @@ public class BankAccount {
     private String accountHolder;
     @Column(name = "available_funds")
     private Double availableFunds;
-    @PrimaryKeyJoinColumn(name = "currency_shortname")
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "currency_shortname_id")
     private CurrencyShortname currencyShortname;
-    @OneToOne(mappedBy = "account", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Limit limit;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "limit_id")
+    private TransactionLimit transactionLimit;
 }
