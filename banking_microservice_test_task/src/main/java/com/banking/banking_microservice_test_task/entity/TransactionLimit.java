@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class Limit {
+public class TransactionLimit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
