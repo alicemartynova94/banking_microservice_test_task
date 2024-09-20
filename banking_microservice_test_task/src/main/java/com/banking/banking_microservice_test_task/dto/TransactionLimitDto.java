@@ -16,6 +16,5 @@ public class TransactionLimitDto {
 
     private UUID id;
     private Double limitSum;
-    private LocalDateTime limitLastUpdateTime;
     private CurrencyShortnameDto currencyShortname;
 }
