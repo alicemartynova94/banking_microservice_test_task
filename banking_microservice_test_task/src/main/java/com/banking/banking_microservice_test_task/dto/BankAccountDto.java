@@ -1,6 +1,5 @@
 package com.banking.banking_microservice_test_task.dto;
 
-import com.banking.banking_microservice_test_task.entity.CurrencyShortname;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +18,5 @@ public class BankAccountDto {
     private String accountHolder;
     private Double availableFunds;
     private CurrencyShortnameDto currencyShortname;
+    private TransactionLimitDto transactionLimit;
 }
