@@ -8,7 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,7 @@ public class TransactionLimit {
     @Column(name = "limit_sum")
     private Double limitSum;
     @UpdateTimestamp
-    @Column(name = "limit_last_update_time", updatable = false, insertable = false)
+    @Column(name = "limit_last_update_time")
     private LocalDateTime limitLastUpdateTime;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "currency_id")
