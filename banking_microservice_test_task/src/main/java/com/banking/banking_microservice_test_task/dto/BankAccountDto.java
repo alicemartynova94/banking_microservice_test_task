@@ -18,5 +18,6 @@ public class BankAccountDto {
     private String accountHolder;
     private Double availableFunds;
     private CurrencyShortnameDto currencyShortname;
-    private TransactionLimitDto transactionLimit;
+    private TransactionLimitDto transactionLimitGoods;
+    private TransactionLimitDto transactionLimitServices;
 }
