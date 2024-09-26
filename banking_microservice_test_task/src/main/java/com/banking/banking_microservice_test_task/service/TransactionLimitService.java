@@ -1,13 +1,13 @@
 package com.banking.banking_microservice_test_task.service;
 
-import com.banking.banking_microservice_test_task.dto.LimitDto;
+import com.banking.banking_microservice_test_task.dto.TransactionLimitDto;
 
 import java.util.UUID;
 
 public interface LimitService {
-    public void saveLimit(LimitDto limitDto);
+    public void saveLimit(TransactionLimitDto limitDto);
 
-    public LimitDto getLimit(UUID id);
+    public TransactionLimitDto getLimit(UUID id);
 
     public void updateLimit(UUID id);
 
