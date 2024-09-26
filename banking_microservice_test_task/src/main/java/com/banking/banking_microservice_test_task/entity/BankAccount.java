@@ -29,6 +29,9 @@ public class BankAccount {
     @JoinColumn(name = "currency_shortname_id")
     private CurrencyShortname currencyShortname;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "limit_id")
-    private TransactionLimit transactionLimit;
+    @JoinColumn(name = "limit_goods_id")
+    private TransactionLimit transactionLimitGoods;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "limit_services_id")
+    private TransactionLimit transactionLimitServices;
 }
