@@ -1,14 +1,16 @@
 spring:
+  jackson:
+    time-zone: UTC
   datasource:
     platform: postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/banking
+    url: jdbc:postgresql://localhost:5432/banking?connectionTimeZone=UTC
     username:
     password:
   jpa:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: validate 
     database: postgresql
 
