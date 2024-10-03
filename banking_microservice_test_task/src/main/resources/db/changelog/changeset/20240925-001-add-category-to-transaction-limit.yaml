@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20230925-001-to-transaction-limit
+      author: alicemartynova94
+      changes:
+        - addColumn:
+            tableName: transaction_limit
+            columns:
+              - column:
+                  name: transaction_category
+                  type: INTEGER
+                  constraints:
+                    nullable: false
