@@ -15,6 +15,7 @@ import java.util.UUID;
 public class TransactionDto {
 
     private UUID id;
+    private UUID bankAccountId;
     private Double transactionSum;
     private TransactionCategory transactionCategory;
     private CurrencyShortnameDto currencyShortname;
