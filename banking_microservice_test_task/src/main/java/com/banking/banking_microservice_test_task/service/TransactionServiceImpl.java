@@ -1,5 +1,6 @@
 package com.banking.banking_microservice_test_task.service;
 
+import com.banking.banking_microservice_test_task.dao.BankAccountRepository;
 import com.banking.banking_microservice_test_task.dao.TransactionRepository;
 import com.banking.banking_microservice_test_task.dto.TransactionDto;
 import com.banking.banking_microservice_test_task.entity.BankAccount;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,19 +23,26 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    BankAccountRepository bankAccountRepository;
 
     @Autowired
     private TransactionMapper transactionMapper;
 
     @Override
     public void saveTransaction(TransactionDto transactionDto) {
-        BankAccount bankAccount = transactionRepository.findByTransactionIdBankAccount(transactionDto.getId()).orElseThrow(() -> new NoSuchBankAccountException("There is no account for the transaction with such id"));
+        BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId()).orElseThrow(() -> new NoSuchBankAccountException("There is no account for the transaction with such id"));
         Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
 
         Double limitServices = bankAccount.getLimitServices();
         Double limitGoods = bankAccount.getLimitGoods();
         Double transactionDtoSum = transactionDto.getTransactionSum();
         Double accountAvailableFunds = bankAccount.getAvailableFunds();
+        List<Transaction> transactionList = bankAccount.getTransaction();
+
+        if (transactionList == null) {
+            transactionList = new ArrayList<>();
+        }
 
         if (transactionDtoSum <= 0 || transactionDtoSum == null) {
             throw new InvalidTransactionSumException("Transaction sum cannot be a negative number or null.");
@@ -44,6 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
                     limitServices -= transactionDtoSum;
                     bankAccount.setLimitServices(limitServices);
                     bankAccount.setAvailableFunds(accountAvailableFunds - transactionDtoSum);
+                    transactionList.add(transaction);
                     transaction.setLimitExceeded(false);
                 } else {
 
@@ -52,12 +63,14 @@ public class TransactionServiceImpl implements TransactionService {
                             "won't be performed due to your limit policy");
                 }
                 transactionRepository.save(transaction);
+                bankAccountRepository.save(bankAccount);
                 break;
             case GOODS:
                 if (transactionDtoSum <= limitGoods) {
                     limitGoods -= transactionDtoSum;
                     bankAccount.setLimitGoods(limitGoods);
                     bankAccount.setAvailableFunds(accountAvailableFunds - transactionDtoSum);
+                    transactionList.add(transaction);
                     transaction.setLimitExceeded(false);
                 } else {
                     transaction.setLimitExceeded(true);
@@ -65,6 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
                             "won't be performed due to your limit policy");
                 }
                 transactionRepository.save(transaction);
+                bankAccountRepository.save(bankAccount);
                 break;
             case null, default:
                 throw new InvalidTransactionTypeException("There are only two transaction types available: GOODS and SERVICES.");
