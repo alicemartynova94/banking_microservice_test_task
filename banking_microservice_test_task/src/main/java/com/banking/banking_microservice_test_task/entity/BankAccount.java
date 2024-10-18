@@ -7,9 +7,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -31,7 +33,14 @@ public class BankAccount {
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "limit_goods_id")
     private TransactionLimit transactionLimitGoods;
+    @Column(name = "limit_goods")
+    private Double limitGoods;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "limit_services_id")
     private TransactionLimit transactionLimitServices;
+    @Column(name = "limit_services")
+    private Double limitServices;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "transaction_id")
+    private List<Transaction> transaction;
 }

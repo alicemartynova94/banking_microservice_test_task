@@ -7,8 +7,10 @@ import com.banking.banking_microservice_test_task.exception_handling.NoSuchBankA
 import com.banking.banking_microservice_test_task.mappers.BankAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,5 +52,15 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccountRepository.deleteById(id);
 
         log.debug("Deleted bank account with id: {}", id);
+    }
+
+    @Scheduled(cron = "#{@bankAccountServiceProperties.cron}")
+    public void updateLimits() {
+        List<BankAccount> accounts = bankAccountRepository.findAll();
+        for (BankAccount account : accounts) {
+            account.setLimitServices(account.getTransactionLimitServices().getLimitSum());
+            account.setLimitGoods(account.getTransactionLimitGoods().getLimitSum());
+            bankAccountRepository.saveAll(accounts);
+        }
     }
 }
