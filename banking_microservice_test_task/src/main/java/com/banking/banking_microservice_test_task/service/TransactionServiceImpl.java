@@ -80,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
                 transactionRepository.save(transaction);
                 bankAccountRepository.save(bankAccount);
                 break;
-            case null, default:
+            default:
                 throw new InvalidTransactionTypeException("There are only two transaction types available: GOODS and SERVICES.");
         }
     }
