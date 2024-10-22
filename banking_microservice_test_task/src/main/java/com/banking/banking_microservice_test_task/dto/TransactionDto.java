@@ -1,5 +1,6 @@
 package com.banking.banking_microservice_test_task.dto;
 
+import com.banking.banking_microservice_test_task.entity.TransactionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,11 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankAccountDto {
+public class TransactionDto {
 
     private UUID id;
-    private Integer accountNumber;
-    private String accountHolder;
-    private Double availableFunds;
+    private UUID bankAccountId;
+    private Double transactionSum;
+    private TransactionCategory transactionCategory;
     private CurrencyShortnameDto currencyShortname;
-    private TransactionLimitDto transactionLimitGoods;
-    private TransactionLimitDto transactionLimitServices;
 }

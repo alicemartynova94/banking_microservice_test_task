@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20230926-001-to-transaction-limit
+      author: alicemartynova94
+      changes:
+        - addColumn:
+            tableName: transaction_limit
+            columns:
+              - column:
+                  name: limit_creation_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
