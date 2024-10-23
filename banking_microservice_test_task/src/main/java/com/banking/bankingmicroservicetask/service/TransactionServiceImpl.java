@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,6 +96,19 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionMapper.transactionToTransactionDto(transaction);
     }
 
+    @Override
+    public List<Transaction> getExceededLimitTransactions(UUID accountId) {
+        log.debug("Fetching all transactions that exceeded limit with bank id: {}", accountId);
+
+        List<Transaction> transactionsList = transactionRepository.findExceededLimitTransactionsByBankAccountId(accountId);
+
+        if (transactionsList.isEmpty()) {
+            System.out.println("There are no transactions that exceeded limit.");
+            return Collections.emptyList();
+        }
+
+        return transactionsList;
+    }
 
     @Override
     public void deleteTransaction(UUID id) {
