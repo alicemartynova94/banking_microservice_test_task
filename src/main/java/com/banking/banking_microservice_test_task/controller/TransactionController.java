@@ -26,15 +26,15 @@ public class TransactionController {
         return transactionService.getTransaction(id);
     }
 
-    @GetMapping("/transactions/{accountId}")
-    public List<Transaction> getExceededLimitTransactions(@PathVariable UUID accountId) {
-        return transactionService.getExceededLimitTransactions(accountId);
-    }
-
     @PostMapping("/transactions")
     public TransactionDto addNewTransaction(@RequestBody TransactionDto transactionDto) {
         transactionService.saveTransaction(transactionDto);
         return transactionDto;
+    }
+
+    @GetMapping("/transactions/{accountId}")
+    public List<Transaction> getExceededLimitTransactions(@PathVariable UUID accountId) {
+        return transactionService.getExceededLimitTransactions(accountId);
     }
 
     @DeleteMapping("/transaction/{id}")
