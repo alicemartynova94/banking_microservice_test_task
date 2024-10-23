@@ -33,4 +33,6 @@ public class Transaction {
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "currency_id")
     private CurrencyShortname currencyShortname;
+    @Column(name = "bank_account_id")
+    private UUID bankAccountId;
 }
