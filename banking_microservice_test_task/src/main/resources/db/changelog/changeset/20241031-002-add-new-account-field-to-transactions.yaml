@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241031-002-add-new-account-fiel
+      author: alicemartynova94
+      changes:
+        - addColumn:
+            tableName: bank_account
+            columns:
+              - column:
+                  name: bank_account_id
+                  type: UUID
+                  constraints:
+                    nullable: false
