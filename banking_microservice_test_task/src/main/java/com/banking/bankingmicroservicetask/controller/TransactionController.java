@@ -1,5 +1,6 @@
 package com.banking.bankingmicroservicetask.controller;
 
+import com.banking.bankingmicroservicetask.entity.Transaction;
 import com.banking.bankingmicroservicetask.service.TransactionService;
 import com.banking.bankingmicroservicetask.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +26,10 @@ public class TransactionController {
         return transactionService.getTransaction(id);
     }
 
+    @GetMapping("/transactions/{accountId}")
+    public List<Transaction> getExceededLimitTransactions(@PathVariable UUID accountId) {
+        return transactionService.getExceededLimitTransactions(accountId);
+    }
 
     @PostMapping("/transactions")
     public TransactionDto addNewTransaction(@RequestBody TransactionDto transactionDto) {
