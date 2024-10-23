@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transaction-limit
+      author: alicemartynova94
+      preConditions:
+        - not:
+            tableExists:
+              tableName: transaction_limit
+      changes:
+        - createTable:
+            tableName: transaction_limit
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: limit_sum
+                  type: double
+                  constraints:
+                    nullable: false
+                    defaultValueNumeric: '1000.00'
+              - column:
+                  name: limit_last_update_time
+                  type: TIMESTAMP
+              - column:
+                  name: currency_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: transaction_limit
+            baseColumnNames: currency_id
+            referencedTableName: currency_shortname
+            referencedColumnNames: id
+            constraintName: transaction_limit_currency_shortname_id_cm
+

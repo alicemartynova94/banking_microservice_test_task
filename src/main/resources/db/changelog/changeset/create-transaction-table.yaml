@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transaction-table
+      author: alicemartynova94
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: transaction
+      changes:
+        - createTable:
+            tableName: transaction
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: transaction_sum
+                  type: DOUBLE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_of_transaction
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transaction_category
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 0
+              - column:
+                  name: limit_exceeded
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: transaction
+            baseColumnNames: currency_id
+            referencedTableName: currency_shortname
+            referencedColumnNames: id
+            constraintName: transaction_currency_shortname_id_cm

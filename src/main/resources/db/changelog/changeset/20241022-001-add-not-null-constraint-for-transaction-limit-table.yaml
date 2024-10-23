@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241022-001-not-null-constraint
+      author: alicemartynova94
+      changes:
+        - addNotNullConstraint:
+            tableName: transaction_limit
+            columnName: currency_id
+            columnDataType: UUID
