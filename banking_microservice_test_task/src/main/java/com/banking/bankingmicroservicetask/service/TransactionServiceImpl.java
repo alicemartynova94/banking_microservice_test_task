@@ -8,6 +8,7 @@ import com.banking.bankingmicroservicetask.entity.Transaction;
 import com.banking.bankingmicroservicetask.exception_handling.InvalidTransactionSumException;
 import com.banking.bankingmicroservicetask.exception_handling.InvalidTransactionTypeException;
 import com.banking.bankingmicroservicetask.exception_handling.NoSuchBankAccountException;
+import com.banking.bankingmicroservicetask.exception_handling.NoSuchTransaction;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void saveTransaction(TransactionDto transactionDto) {
-        BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId()).orElseThrow(() -> new NoSuchBankAccountException("There is no account for the transaction with such id"));
+        BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId()).orElseThrow(NoSuchBankAccountException::new);
         Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
 
         Double limitServices = bankAccount.getLimitServices();
@@ -46,7 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         if (transactionDtoSum <= 0 || transactionDtoSum == null) {
-            throw new InvalidTransactionSumException("Transaction sum cannot be a negative number or null.");
+            throw new InvalidTransactionSumException();
         }
 
         switch (transactionDto.getTransactionCategory()) {
@@ -82,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
                 bankAccountRepository.save(bankAccount);
                 break;
             default:
-                throw new InvalidTransactionTypeException("There are only two transaction types available: GOODS and SERVICES.");
+                throw new InvalidTransactionTypeException();
         }
     }
 
@@ -91,7 +92,7 @@ public class TransactionServiceImpl implements TransactionService {
         log.debug("Fetching transaction with id: {}", id);
 
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("There is no transaction with such id"));
+                .orElseThrow(NoSuchTransaction::new);
 
         return transactionMapper.transactionToTransactionDto(transaction);
     }
@@ -104,7 +105,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (transactionsList.isEmpty()) {
             System.out.println("There are no transactions that exceeded limit.");
-            return Collections.emptyList();
         }
 
         return transactionsList;
@@ -113,7 +113,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deleteTransaction(UUID id) {
         transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("There is no transaction with such id"));
+                .orElseThrow(NoSuchTransaction::new);
 
         log.debug("Deleting transaction with id: {}", id);
 

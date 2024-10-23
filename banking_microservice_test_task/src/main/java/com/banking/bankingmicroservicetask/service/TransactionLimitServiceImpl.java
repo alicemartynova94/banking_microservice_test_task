@@ -36,7 +36,7 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
     public TransactionLimitDto getLimit(UUID id) {
         log.debug("Fetching limit with id: {}", id);
 
-        TransactionLimit transactionLimit = transactionLimitRepository.findById(id).orElseThrow(() -> new NoSuchLimitException("Limit with this id is not found."));
+        TransactionLimit transactionLimit = transactionLimitRepository.findById(id).orElseThrow(NoSuchLimitException::new);
 
         return transactionLimitMapper.limitToLimitDto(transactionLimit);
     }
@@ -44,7 +44,7 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
     @Override
     public void updateLimit(UUID id, TransactionLimitDto transactionLimitDto) {
         log.debug("Fetching limit with id: {}", id);
-        TransactionLimit transactionLimit = transactionLimitRepository.findById(id).orElseThrow(() -> new NoSuchLimitException("Limit with this id is not found."));
+        TransactionLimit transactionLimit = transactionLimitRepository.findById(id).orElseThrow(NoSuchLimitException::new);
         Double limitSum = transactionLimitDto.getLimitSum();
 
         LocalDateTime today = LocalDateTime.now();
@@ -53,10 +53,10 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
         log.debug("Attempting to update limit with sum: {}", limitSum);
 
         if (today.getDayOfMonth() != 15) {
-            throw new LimitUpdateNotAllowedException("Limit updates are only allowed on the 15th of each month.");
+            throw new LimitUpdateNotAllowedException();
         }
         if (today.getMonth() == lastUpdated.getMonth() && today.getYear() == lastUpdated.getYear()) {
-            throw new LimitUpdateFrequencyExceededException("You've already created limit this month.");
+            throw new LimitUpdateFrequencyExceededException();
         }
         transactionLimit.setLimitSum(limitSum);
         transactionLimit.setTransactionCategory(transactionLimitDto.getTransactionCategory());
@@ -68,7 +68,7 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
     @Override
     public void deleteLimit(UUID id) {
         log.debug("Fetching limit with id: {}", id);
-        transactionLimitRepository.findById(id).orElseThrow(() -> new NoSuchLimitException("Limit with this id is not found."));
+        transactionLimitRepository.findById(id).orElseThrow(NoSuchLimitException::new);
 
         log.debug("Deleting limit with id: {}", id);
         transactionLimitRepository.deleteById(id);
