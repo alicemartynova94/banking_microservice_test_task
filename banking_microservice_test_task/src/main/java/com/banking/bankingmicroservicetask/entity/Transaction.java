@@ -26,6 +26,8 @@ public class Transaction {
     @CreationTimestamp
     @Column(name = "time_of_transaction")
     private LocalDateTime timeOfTransaction;
+    @Column(name = "transaction_deleted_time")
+    private LocalDateTime transactionDeletedTime;
     @Column(name = "transaction_category")
     private TransactionCategory transactionCategory;
     @Column(name = "limit_exceeded")
