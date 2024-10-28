@@ -36,7 +36,7 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
     public TransactionLimitDto getLimit(UUID id) {
         log.debug("Fetching limit with id: {}", id);
 
-        TransactionLimit transactionLimit = transactionLimitRepository.findById(id).orElseThrow(NoSuchLimitException::new);
+        TransactionLimit transactionLimit = transactionLimitRepository.findByIdActiveLimit(id).orElseThrow(NoSuchLimitException::new);
 
         return transactionLimitMapper.limitToLimitDto(transactionLimit);
     }
@@ -44,7 +44,7 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
     @Override
     public void updateLimit(UUID id, TransactionLimitDto transactionLimitDto) {
         log.debug("Fetching limit with id: {}", id);
-        TransactionLimit transactionLimit = transactionLimitRepository.findById(id).orElseThrow(NoSuchLimitException::new);
+        TransactionLimit transactionLimit = transactionLimitRepository.findByIdActiveLimit(id).orElseThrow(NoSuchLimitException::new);
         Double limitSum = transactionLimitDto.getLimitSum();
 
         LocalDateTime today = LocalDateTime.now();
@@ -68,10 +68,11 @@ public class TransactionLimitServiceImpl implements TransactionLimitService {
     @Override
     public void deleteLimit(UUID id) {
         log.debug("Fetching limit with id: {}", id);
-        transactionLimitRepository.findById(id).orElseThrow(NoSuchLimitException::new);
+        TransactionLimit transactionLimit = transactionLimitRepository.findByIdActiveLimit(id).orElseThrow(NoSuchLimitException::new);
 
         log.debug("Deleting limit with id: {}", id);
-        transactionLimitRepository.deleteById(id);
+        transactionLimit.setLimitDeletedTime(LocalDateTime.now());
+        transactionLimitRepository.save(transactionLimit);
 
         log.debug("Deleted limit with id: {}", id);
     }

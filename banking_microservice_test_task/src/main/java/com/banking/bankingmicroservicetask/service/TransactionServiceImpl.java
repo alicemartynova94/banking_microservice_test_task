@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void saveTransaction(TransactionDto transactionDto) {
-        BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId()).orElseThrow(NoSuchBankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByIdActiveAccount(transactionDto.getBankAccountId()).orElseThrow(NoSuchBankAccountException::new);
         Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
 
         Double limitServices = bankAccount.getLimitServices();
@@ -91,7 +92,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto getTransaction(UUID id) {
         log.debug("Fetching transaction with id: {}", id);
 
-        Transaction transaction = transactionRepository.findById(id)
+        Transaction transaction = transactionRepository.findByIdActiveTransaction(id)
                 .orElseThrow(NoSuchTransaction::new);
 
         return transactionMapper.transactionToTransactionDto(transaction);
@@ -112,12 +113,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(UUID id) {
-        transactionRepository.findById(id)
+        Transaction transaction = transactionRepository.findByIdActiveTransaction(id)
                 .orElseThrow(NoSuchTransaction::new);
 
         log.debug("Deleting transaction with id: {}", id);
 
-        transactionRepository.deleteById(id);
+        transaction.setTransactionDeletedTime(LocalDateTime.now());
+        transactionRepository.save(transaction);
 
         log.debug("Transaction with id: {} was deleted", id);
     }
