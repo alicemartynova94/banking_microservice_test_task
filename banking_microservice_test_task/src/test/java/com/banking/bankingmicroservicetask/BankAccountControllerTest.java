@@ -3,7 +3,10 @@ package com.banking.bankingmicroservicetask;
 
 import com.banking.bankingmicroservicetask.dto.BankAccountDto;
 import com.banking.bankingmicroservicetask.dto.CurrencyShortnameDto;
+import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.service.BankAccountService;
+import com.banking.bankingmicroservicetask.service.TransactionLimitService;
+import com.banking.bankingmicroservicetask.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.UUID;
 
+
 @WebMvcTest
 public class BankAccountControllerTest {
 
@@ -36,6 +40,10 @@ public class BankAccountControllerTest {
 
     @MockBean
     private BankAccountService bankAccountService;
+    @MockBean
+    private TransactionService transactionService;
+    @MockBean
+    private TransactionLimitService transactionLimit;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -54,7 +62,7 @@ public class BankAccountControllerTest {
         String accountHolder = "Smirnov Dmitry";
         Double availableFunds = 0.0;
 
-        bankAccountDto = new BankAccountDto(accountId, accountNumber, accountHolder, availableFunds, currencyShortnameDto);
+        bankAccountDto = new BankAccountDto(accountId, accountNumber, accountHolder, availableFunds, currencyShortnameDto, new TransactionLimitDto(), new TransactionLimitDto());
     }
 
 
