@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask;
+package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
 import com.banking.bankingmicroservicetask.dao.TransactionRepository;

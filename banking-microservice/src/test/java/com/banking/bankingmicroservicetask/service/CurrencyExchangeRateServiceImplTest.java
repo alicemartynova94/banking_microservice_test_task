@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask;
+package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.entity.CurrencyExchangeRate;
 import com.banking.bankingmicroservicetask.properties.CurrencyExchangeRateServiceProperties;

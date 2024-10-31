@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask;
+package com.banking.bankingmicroservicetask.controller;
 
 
 import com.banking.bankingmicroservicetask.dto.BankAccountDto;

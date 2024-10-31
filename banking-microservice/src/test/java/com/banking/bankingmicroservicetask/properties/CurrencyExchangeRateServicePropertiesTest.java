@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask;
+package com.banking.bankingmicroservicetask.properties;
 
 import com.banking.bankingmicroservicetask.properties.CurrencyExchangeRateServiceProperties;
 import jakarta.validation.ConstraintViolation;
