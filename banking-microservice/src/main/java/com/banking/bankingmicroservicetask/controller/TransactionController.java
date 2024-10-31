@@ -2,7 +2,7 @@ package com.banking.bankingmicroservicetask.controller;
 
 import com.banking.bankingmicroservicetask.entity.Transaction;
 import com.banking.bankingmicroservicetask.service.TransactionService;
-import com.banking.bankingmicroservicetask.dto.TransactionDto;
+import com.banking.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

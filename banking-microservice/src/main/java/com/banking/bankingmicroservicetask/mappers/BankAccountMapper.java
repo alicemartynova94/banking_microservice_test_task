@@ -1,7 +1,7 @@
 package com.banking.bankingmicroservicetask.mappers;
 
 
-import com.banking.bankingmicroservicetask.dto.BankAccountDto;
+import com.banking.dto.BankAccountDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import org.mapstruct.Mapper;
 

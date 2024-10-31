@@ -3,16 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
-        <relativePath/>
+        <artifactId>banking-microservice</artifactId>
+        <groupId>com.banking</groupId>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.banking</groupId>
     <artifactId>banking-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>banking-microservice</name>
     <description>Demo project</description>
+    <packaging>jar</packaging>
     <properties>
         <java.version>17</java.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>

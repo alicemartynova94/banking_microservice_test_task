@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.entity;
+package com.banking.enums;
 
 public enum TransactionCategory {
     GOODS(0),

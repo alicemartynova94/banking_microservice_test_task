@@ -1,16 +1,15 @@
 package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
-import com.banking.bankingmicroservicetask.dto.BankAccountDto;
-import com.banking.bankingmicroservicetask.dto.CurrencyShortnameDto;
+import com.banking.dto.BankAccountDto;
+import com.banking.dto.CurrencyShortnameDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.entity.CurrencyShortname;
-import com.banking.bankingmicroservicetask.exception_handling.NoSuchBankAccountException;
+import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.mappers.BankAccountMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.banking.bankingmicroservicetask.service.BankAccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

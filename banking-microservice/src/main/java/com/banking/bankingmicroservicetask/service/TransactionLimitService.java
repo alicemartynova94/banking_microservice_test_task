@@ -1,6 +1,6 @@
 package com.banking.bankingmicroservicetask.service;
 
-import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
+import com.banking.dto.TransactionLimitDto;
 
 import java.util.UUID;
 

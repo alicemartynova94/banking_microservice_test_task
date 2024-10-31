@@ -2,12 +2,11 @@ package com.banking.bankingmicroservicetask.service;
 
 
 import com.banking.bankingmicroservicetask.dao.TransactionLimitRepository;
-import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
-import com.banking.bankingmicroservicetask.entity.TransactionCategory;
+import com.banking.dto.TransactionLimitDto;
+import com.banking.enums.TransactionCategory;
 import com.banking.bankingmicroservicetask.entity.TransactionLimit;
-import com.banking.bankingmicroservicetask.exception_handling.LimitUpdateFrequencyExceededException;
-import com.banking.bankingmicroservicetask.exception_handling.LimitUpdateNotAllowedException;
-import com.banking.bankingmicroservicetask.service.TransactionLimitServiceImpl;
+import com.banking.bankingmicroservicetask.exceptions.LimitUpdateFrequencyExceededException;
+import com.banking.bankingmicroservicetask.exceptions.LimitUpdateNotAllowedException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

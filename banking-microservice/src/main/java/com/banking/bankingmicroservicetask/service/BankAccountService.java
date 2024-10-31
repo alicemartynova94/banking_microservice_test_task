@@ -1,6 +1,6 @@
 package com.banking.bankingmicroservicetask.service;
 
-import com.banking.bankingmicroservicetask.dto.BankAccountDto;
+import com.banking.dto.BankAccountDto;
 
 import java.util.UUID;
 

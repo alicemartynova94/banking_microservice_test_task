@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.exception_handling;
+package com.banking.bankingmicroservicetask.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

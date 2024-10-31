@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.exception_handling;
+package com.banking.bankingmicroservicetask.exceptions;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,9 @@
 package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
-import com.banking.bankingmicroservicetask.dto.BankAccountDto;
+import com.banking.dto.BankAccountDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
-import com.banking.bankingmicroservicetask.exception_handling.NoSuchBankAccountException;
+import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.mappers.BankAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

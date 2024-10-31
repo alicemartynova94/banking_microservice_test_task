@@ -1,6 +1,6 @@
 package com.banking.bankingmicroservicetask.controller;
 
-import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
+import com.banking.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.service.TransactionLimitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

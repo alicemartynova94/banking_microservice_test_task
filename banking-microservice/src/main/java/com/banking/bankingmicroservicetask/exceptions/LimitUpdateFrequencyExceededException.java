@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.exception_handling;
+package com.banking.bankingmicroservicetask.exceptions;
 
 public class LimitUpdateFrequencyExceededException extends RuntimeException {
     public LimitUpdateFrequencyExceededException(String message) {
