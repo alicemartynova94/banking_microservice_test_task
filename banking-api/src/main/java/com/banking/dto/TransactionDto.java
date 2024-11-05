@@ -1,6 +1,6 @@
 package com.banking.dto;
 
-import com.banking.bankingmicroservicetask.entity.TransactionCategory;
+import com.banking.enums.TransactionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

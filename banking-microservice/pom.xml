@@ -6,12 +6,14 @@
         <artifactId>banking-microservice</artifactId>
         <groupId>com.banking</groupId>
         <version>0.1.0-SNAPSHOT</version>
+        <relativePath/>
     </parent>
     <artifactId>banking-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>banking-microservice</name>
     <description>Demo project</description>
     <packaging>jar</packaging>
+
     <properties>
         <java.version>17</java.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
@@ -19,6 +21,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,6 +64,11 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.banking</groupId>
+            <artifactId>banking-api</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
