@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.exception_handling;
+package com.banking.bankingmicroservicetask.exceptions;
 
 public class NoSuchLimitException extends RuntimeException {
     public NoSuchLimitException(String message) {

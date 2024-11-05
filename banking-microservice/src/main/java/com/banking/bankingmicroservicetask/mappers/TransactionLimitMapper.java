@@ -1,6 +1,6 @@
 package com.banking.bankingmicroservicetask.mappers;
 
-import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
+import com.banking.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.entity.TransactionLimit;
 import org.mapstruct.Mapper;
 

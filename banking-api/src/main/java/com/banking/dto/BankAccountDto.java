@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.dto;
+package com.banking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

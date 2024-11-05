@@ -1,5 +1,6 @@
 package com.banking.bankingmicroservicetask.entity;
 
+import com.banking.enums.TransactionCategory;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -2,13 +2,13 @@ package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
 import com.banking.bankingmicroservicetask.dao.TransactionRepository;
-import com.banking.bankingmicroservicetask.dto.TransactionDto;
+import com.banking.dto.TransactionDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.entity.Transaction;
-import com.banking.bankingmicroservicetask.exception_handling.InvalidTransactionSumException;
-import com.banking.bankingmicroservicetask.exception_handling.InvalidTransactionTypeException;
-import com.banking.bankingmicroservicetask.exception_handling.NoSuchBankAccountException;
-import com.banking.bankingmicroservicetask.exception_handling.NoSuchTransaction;
+import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionSumException;
+import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionTypeException;
+import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
+import com.banking.bankingmicroservicetask.exceptions.NoSuchTransaction;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 

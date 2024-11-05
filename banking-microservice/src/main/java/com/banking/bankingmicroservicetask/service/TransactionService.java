@@ -1,6 +1,6 @@
 package com.banking.bankingmicroservicetask.service;
 
-import com.banking.bankingmicroservicetask.dto.TransactionDto;
+import com.banking.dto.TransactionDto;
 import com.banking.bankingmicroservicetask.entity.Transaction;
 
 import java.util.List;

@@ -2,14 +2,13 @@ package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
 import com.banking.bankingmicroservicetask.dao.TransactionRepository;
-import com.banking.bankingmicroservicetask.dto.TransactionDto;
+import com.banking.dto.TransactionDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.entity.Transaction;
-import com.banking.bankingmicroservicetask.entity.TransactionCategory;
-import com.banking.bankingmicroservicetask.exception_handling.InvalidTransactionSumException;
-import com.banking.bankingmicroservicetask.exception_handling.NoSuchBankAccountException;
+import com.banking.enums.TransactionCategory;
+import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionSumException;
+import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
-import com.banking.bankingmicroservicetask.service.TransactionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

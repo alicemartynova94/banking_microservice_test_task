@@ -1,9 +1,9 @@
 package com.banking.bankingmicroservicetask.controller;
 
 
-import com.banking.bankingmicroservicetask.dto.BankAccountDto;
-import com.banking.bankingmicroservicetask.dto.CurrencyShortnameDto;
-import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
+import com.banking.dto.BankAccountDto;
+import com.banking.dto.CurrencyShortnameDto;
+import com.banking.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.service.BankAccountService;
 import com.banking.bankingmicroservicetask.service.TransactionLimitService;
 import com.banking.bankingmicroservicetask.service.TransactionService;

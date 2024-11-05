@@ -1,6 +1,6 @@
 package com.banking.bankingmicroservicetask.mappers;
 
-import com.banking.bankingmicroservicetask.dto.CurrencyShortnameDto;
+import com.banking.dto.CurrencyShortnameDto;
 import com.banking.bankingmicroservicetask.entity.CurrencyShortname;
 import org.mapstruct.Mapper;
 

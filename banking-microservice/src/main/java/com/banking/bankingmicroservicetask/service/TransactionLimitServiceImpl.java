@@ -1,11 +1,11 @@
 package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.TransactionLimitRepository;
-import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
+import com.banking.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.entity.TransactionLimit;
-import com.banking.bankingmicroservicetask.exception_handling.LimitUpdateFrequencyExceededException;
-import com.banking.bankingmicroservicetask.exception_handling.LimitUpdateNotAllowedException;
-import com.banking.bankingmicroservicetask.exception_handling.NoSuchLimitException;
+import com.banking.bankingmicroservicetask.exceptions.LimitUpdateFrequencyExceededException;
+import com.banking.bankingmicroservicetask.exceptions.LimitUpdateNotAllowedException;
+import com.banking.bankingmicroservicetask.exceptions.NoSuchLimitException;
 import com.banking.bankingmicroservicetask.mappers.TransactionLimitMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

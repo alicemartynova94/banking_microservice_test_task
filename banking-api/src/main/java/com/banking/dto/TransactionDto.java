@@ -1,4 +1,4 @@
-package com.banking.bankingmicroservicetask.dto;
+package com.banking.dto;
 
 import com.banking.bankingmicroservicetask.entity.TransactionCategory;
 import lombok.AllArgsConstructor;
