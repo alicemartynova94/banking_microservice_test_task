@@ -31,11 +31,10 @@ public class TransactionController {
 
     @Tag(name = "get", description = "Get methods of Transaction API.")
     @Operation(summary = "Get a transaction",
-    description = "Get an existing transaction by id. The response is a successfully performed transaction or a transaction that exceed limit.")
+    description = "Get an existing transaction by id. The response is a successfully performed transaction.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Transaction created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid transaction data"),
-            @ApiResponse(responseCode = "404", description = "Bank account for this transaction is not found")
+            @ApiResponse(responseCode = "201", description = "Transaction retrieved successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid transaction data.")
     })
     @GetMapping("/transaction/{id}")
     public TransactionDto getTransaction(@PathVariable UUID id) {
@@ -46,7 +45,7 @@ public class TransactionController {
     @Operation(summary = "Get transactions",
             description = "Get transactions that exceeded limit only.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transactions that exceed limit or an empty list retrieved successfully",
+            @ApiResponse(responseCode = "200", description = "Transactions that exceed limit or an empty list retrieved successfully.",
                     content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Transaction.class))))
     })
     @GetMapping("/transactions/{accountId}")
@@ -57,8 +56,8 @@ public class TransactionController {
     @Operation(summary = "Save a transaction",
             description = "Save a new transaction into database.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Transaction created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid transaction data")
+            @ApiResponse(responseCode = "201", description = "Transaction created successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid transaction data. Transaction is not found.")
     })
     @PostMapping("/transactions")
     public TransactionDto addNewTransaction(@RequestBody TransactionDto transactionDto) {
@@ -69,8 +68,8 @@ public class TransactionController {
     @Operation(summary = "Delete a transaction",
             description = "Delete an existing transaction by id.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Transaction not found")
+            @ApiResponse(responseCode = "204", description = "Transaction deleted successfully."),
+            @ApiResponse(responseCode = "404", description = "Transaction is not found.")
     })
     @DeleteMapping("/transaction/{id}")
     public void deleteTransaction(@PathVariable UUID id) {
