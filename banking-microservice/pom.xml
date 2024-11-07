@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>banking-microservice</artifactId>
+        <artifactId>banking</artifactId>
         <groupId>com.banking</groupId>
         <version>0.1.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
     <artifactId>banking-microservice</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <name>banking-microservice</name>
     <description>Demo project</description>
     <packaging>jar</packaging>
