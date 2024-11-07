@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class OpenAPIConfiguration {
     @Bean
-    public OpenAPI defineOpenApi() {
+    public OpenAPI bankingOpenApi() {
         Server server = new Server();
         server.setUrl("http://localhost:8080");
 
