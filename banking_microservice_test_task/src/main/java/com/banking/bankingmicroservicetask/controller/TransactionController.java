@@ -4,6 +4,7 @@ import com.banking.bankingmicroservicetask.entity.Transaction;
 import com.banking.bankingmicroservicetask.service.TransactionService;
 import com.banking.bankingmicroservicetask.dto.TransactionDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,13 +32,16 @@ public class TransactionController {
 
     @Tag(name = "get", description = "Get methods of Transaction API.")
     @Operation(summary = "Get a transaction",
-    description = "Get an existing transaction by id. The response is a successfully performed transaction.")
+            description = "Get an existing transaction by id. The response is a successfully performed transaction.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Transaction retrieved successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid transaction data.")
     })
     @GetMapping("/transaction/{id}")
-    public TransactionDto getTransaction(@PathVariable UUID id) {
+    public TransactionDto getTransaction(@Parameter(
+            description = "ID of the transaction to be retrieved.",
+            required = true)
+                                         @PathVariable UUID id) {
         return transactionService.getTransaction(id);
     }
 
@@ -49,7 +53,10 @@ public class TransactionController {
                     content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Transaction.class))))
     })
     @GetMapping("/transactions/{accountId}")
-    public List<Transaction> getExceededLimitTransactions(@PathVariable UUID accountId) {
+    public List<Transaction> getExceededLimitTransactions(@Parameter(
+            description = "ID of the bank account to retrieve transactions.",
+            required = true)
+                                                          @PathVariable UUID accountId) {
         return transactionService.getExceededLimitTransactions(accountId);
     }
 
@@ -72,7 +79,10 @@ public class TransactionController {
             @ApiResponse(responseCode = "404", description = "Transaction is not found.")
     })
     @DeleteMapping("/transaction/{id}")
-    public void deleteTransaction(@PathVariable UUID id) {
+    public void deleteTransaction(@Parameter(
+            description = "ID of the transaction to be deleted.",
+            required = true)
+                                  @PathVariable UUID id) {
         transactionService.deleteTransaction(id);
     }
 

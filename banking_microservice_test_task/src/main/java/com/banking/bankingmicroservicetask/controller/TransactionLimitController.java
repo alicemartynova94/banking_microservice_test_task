@@ -3,6 +3,7 @@ package com.banking.bankingmicroservicetask.controller;
 import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.service.TransactionLimitService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,7 +45,10 @@ public class TransactionLimitController {
             @ApiResponse(responseCode = "404", description = "Transaction limit is not found.")
     })
     @GetMapping("/limit/{id}")
-    public TransactionLimitDto getLimit(@PathVariable UUID id) {
+    public TransactionLimitDto getLimit(@Parameter(
+            description = "ID of the transaction limit to be retrieved.",
+            required = true)
+                                        @PathVariable UUID id) {
         return transactionLimitService.getLimit(id);
     }
 
@@ -57,7 +61,10 @@ public class TransactionLimitController {
             @ApiResponse(responseCode = "409", description = "Transaction limit update frequency is exceeded.")
     })
     @PutMapping("/limits/{id}")
-    public void updateLimit(@PathVariable UUID id, @RequestBody TransactionLimitDto transactionLimitDto) {
+    public void updateLimit(@Parameter(
+            description = "ID of the transaction limit to be updated.",
+            required = true)
+                            @PathVariable UUID id, @RequestBody TransactionLimitDto transactionLimitDto) {
         transactionLimitService.updateLimit(id, transactionLimitDto);
     }
 
@@ -68,7 +75,10 @@ public class TransactionLimitController {
             @ApiResponse(responseCode = "404", description = "Transaction limit not found.")
     })
     @DeleteMapping("/limit/{id}")
-    public void deleteLimit(@PathVariable UUID id) {
+    public void deleteLimit(@Parameter(
+            description = "ID of the transaction limit to be deleted.",
+            required = true)
+                            @PathVariable UUID id) {
         transactionLimitService.deleteLimit(id);
     }
 

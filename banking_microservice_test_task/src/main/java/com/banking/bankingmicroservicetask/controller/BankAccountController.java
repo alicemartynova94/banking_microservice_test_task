@@ -4,6 +4,7 @@ import com.banking.bankingmicroservicetask.dto.BankAccountDto;
 import com.banking.bankingmicroservicetask.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.service.BankAccountService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,7 +31,10 @@ public class BankAccountController {
             @ApiResponse(responseCode = "404", description = "Bank account limit is not found.")
     })
     @GetMapping("/account/{id}")
-    public BankAccountDto getAccount(@PathVariable UUID id) {
+    public BankAccountDto getAccount(@Parameter(
+            description = "ID of the bank account to be retrieved.",
+            required = true)
+                                     @PathVariable UUID id) {
         return bankAccountService.getAccount(id);
     }
 
@@ -53,7 +57,10 @@ public class BankAccountController {
             @ApiResponse(responseCode = "404", description = "Bank account not found.")
     })
     @DeleteMapping("/account/{id}")
-    public void deleteAccount(@PathVariable UUID id) {
+    public void deleteAccount(@Parameter(
+            description = "ID of the bank account to be deleted.",
+            required = true)
+            @PathVariable UUID id) {
         bankAccountService.deleteAccount(id);
     }
 }
