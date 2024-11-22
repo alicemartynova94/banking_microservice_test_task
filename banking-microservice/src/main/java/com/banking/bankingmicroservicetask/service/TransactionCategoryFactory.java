@@ -1,7 +1,8 @@
 package com.banking.bankingmicroservicetask.service;
 
-import com.banking.bankingmicroservicetask.entity.TransactionCategory;
-import com.banking.bankingmicroservicetask.exception_handling.InvalidTransactionTypeException;
+
+import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionTypeException;
+import com.banking.enums.TransactionCategory;
 
 public class TransactionCategoryFactory {
 
