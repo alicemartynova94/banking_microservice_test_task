@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241028-001-add-deleted-time
+      author: alicemartynova94
+      changes:
+        - addColumn:
+            tableName: bank_account
+            columns:
+              - column:
+                  name: account_deleted_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true

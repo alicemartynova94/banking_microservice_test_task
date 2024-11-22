@@ -6,9 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     @Query(value = "SELECT * FROM transaction t WHERE t.bank_account_id = :accountId AND t.limit_exceeded = true", nativeQuery = true)
     List<Transaction> findExceededLimitTransactionsByBankAccountId(@Param("accountId") UUID accountId);
+
+    @Query("SELECT t FROM Transaction t WHERE t.id = :id AND t.transactionDeletedTime IS NULL")
+    Optional<Transaction> findByIdActiveTransaction(@Param("id") UUID id);
 }

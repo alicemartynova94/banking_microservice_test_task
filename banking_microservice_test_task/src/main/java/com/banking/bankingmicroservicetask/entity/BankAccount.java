@@ -10,7 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +29,8 @@ public class BankAccount {
     private String accountHolder;
     @Column(name = "available_funds")
     private Double availableFunds;
+    @Column(name = "account_deleted_time")
+    private LocalDateTime bankAccountDeletedTime;
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "currency_shortname_id")
     private CurrencyShortname currencyShortname;

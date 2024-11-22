@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241028-002-add-deleted-time
+      author: alicemartynova94
+      changes:
+        - addColumn:
+            tableName: transaction_limit
+            columns:
+              - column:
+                  name: limit_deleted_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true

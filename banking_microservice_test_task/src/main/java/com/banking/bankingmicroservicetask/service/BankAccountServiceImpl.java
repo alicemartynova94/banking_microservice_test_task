@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,18 +39,19 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccountDto getAccount(UUID id) {
         log.debug("Fetching bank account with id: {}", id);
 
-        BankAccount bankAccount = bankAccountRepository.findById(id).orElseThrow(NoSuchBankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByIdActiveAccount(id).orElseThrow(NoSuchBankAccountException::new);
 
         return bankAccountMapper.bankAccountToBankAccountDto(bankAccount);
     }
 
     @Override
     public void deleteAccount(UUID id) {
-        bankAccountRepository.findById(id).orElseThrow(NoSuchBankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByIdActiveAccount(id).orElseThrow(NoSuchBankAccountException::new);
 
         log.debug("Deleting bank account with id: {}", id);
 
-        bankAccountRepository.deleteById(id);
+        bankAccount.setBankAccountDeletedTime(LocalDateTime.now());
+        bankAccountRepository.save(bankAccount);
 
         log.debug("Deleted bank account with id: {}", id);
     }
