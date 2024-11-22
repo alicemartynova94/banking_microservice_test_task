@@ -9,6 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Setter;
 
@@ -22,17 +25,23 @@ import java.util.UUID;
 public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @NotNull
     private UUID id;
     @Column(name = "account_number")
+    @NotNull
     private Integer accountNumber;
     @Column(name = "account_holder")
+    @NotNull
+    @Size(max = 150)
     private String accountHolder;
     @Column(name = "available_funds")
+    @NotNull
     private Double availableFunds;
     @Column(name = "account_deleted_time")
     private LocalDateTime bankAccountDeletedTime;
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "currency_shortname_id")
+    @NotNull
     private CurrencyShortname currencyShortname;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "limit_goods_id")
