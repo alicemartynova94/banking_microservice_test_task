@@ -2,6 +2,7 @@ package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.entity.CurrencyExchangeRate;
 import com.banking.bankingmicroservicetask.properties.CurrencyExchangeRateServiceProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,11 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
+@RequiredArgsConstructor
 public class CurrencyExchangeRateServiceImpl implements CurrencyExchangeRateService {
-    @Autowired
-    private RestTemplate restTemplate;
 
-    @Autowired
-    private CurrencyExchangeRateServiceProperties properties;
+    private final RestTemplate restTemplate;
+    private final CurrencyExchangeRateServiceProperties properties;
 
     @Override
     public CurrencyExchangeRate getExchangeRateData(String currencyName) {

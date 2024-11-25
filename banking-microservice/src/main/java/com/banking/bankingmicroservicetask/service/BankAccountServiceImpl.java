@@ -5,6 +5,7 @@ import com.banking.dto.BankAccountDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.mappers.BankAccountMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,13 +17,12 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BankAccountServiceImpl implements BankAccountService {
 
-    @Autowired
-    private BankAccountRepository bankAccountRepository;
 
-    @Autowired
-    private BankAccountMapper bankAccountMapper;
+    private final BankAccountRepository bankAccountRepository;
+    private final BankAccountMapper bankAccountMapper;
 
     @Override
     public void saveAccount(BankAccountDto bankAccountDto) {

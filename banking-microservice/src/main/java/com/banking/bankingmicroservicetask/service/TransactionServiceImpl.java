@@ -9,6 +9,7 @@ import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionSumExcep
 import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchTransaction;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,11 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
-    @Autowired
-    BankAccountRepository bankAccountRepository;
+    private final TransactionRepository transactionRepository;
+    private final BankAccountRepository bankAccountRepository;
 
     @Autowired
     private TransactionMapper transactionMapper;

@@ -8,6 +8,7 @@ import com.banking.bankingmicroservicetask.service.BankAccountService;
 import com.banking.bankingmicroservicetask.service.TransactionLimitService;
 import com.banking.bankingmicroservicetask.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +34,18 @@ import java.util.UUID;
 
 
 @WebMvcTest
+@RequiredArgsConstructor
 public class BankAccountControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
     @MockBean
     private BankAccountService bankAccountService;
     @MockBean
     private TransactionService transactionService;
     @MockBean
     private TransactionLimitService transactionLimit;
-
-    @Autowired
-    ObjectMapper objectMapper;
+    
     private UUID accountId;
     private BankAccountDto bankAccountDto;
 

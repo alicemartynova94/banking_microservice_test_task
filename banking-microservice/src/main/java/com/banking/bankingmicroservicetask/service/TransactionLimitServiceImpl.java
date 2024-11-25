@@ -7,6 +7,7 @@ import com.banking.bankingmicroservicetask.exceptions.LimitUpdateFrequencyExceed
 import com.banking.bankingmicroservicetask.exceptions.LimitUpdateNotAllowedException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchLimitException;
 import com.banking.bankingmicroservicetask.mappers.TransactionLimitMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,11 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class TransactionLimitServiceImpl implements TransactionLimitService {
-    @Autowired
-    private TransactionLimitRepository transactionLimitRepository;
-    @Autowired
-    private TransactionLimitMapper transactionLimitMapper;
+
+    private final TransactionLimitRepository transactionLimitRepository;
+    private final TransactionLimitMapper transactionLimitMapper;
 
     @Override
     public void saveLimit(TransactionLimitDto limitDto) {
