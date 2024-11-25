@@ -6,7 +6,6 @@ import com.banking.dto.TransactionDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.entity.Transaction;
 import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionSumException;
-import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionTypeException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchTransaction;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,7 +52,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto getTransaction(UUID id) {
         log.debug("Fetching transaction with id: {}", id);
 
-        Transaction transaction = transactionRepository.findByIdActiveTransaction(id)
+        Transaction transaction = transactionRepository.findByIdAndDeletedTimeIsNull(id)
                 .orElseThrow(NoSuchTransaction::new);
 
         return transactionMapper.transactionToTransactionDto(transaction);
@@ -65,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Transaction> getExceededLimitTransactions(UUID accountId) {
         log.debug("Fetching all transactions that exceeded limit with bank id: {}", accountId);
 
-        List<Transaction> transactionsList = transactionRepository.findExceededLimitTransactionsByBankAccountId(accountId);
+        List<Transaction> transactionsList = transactionRepository.findAllByBankAccountIdAndLimitExceededIsTrue(accountId);
 
         if (transactionsList.isEmpty()) {
             System.out.println("There are no transactions that exceeded limit.");
@@ -76,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(UUID id) {
-        Transaction transaction = transactionRepository.findByIdActiveTransaction(id)
+        Transaction transaction = transactionRepository.findByIdAndDeletedTimeIsNull(id)
                 .orElseThrow(NoSuchTransaction::new);
 
         log.debug("Deleting transaction with id: {}", id);
