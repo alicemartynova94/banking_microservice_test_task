@@ -12,6 +12,7 @@ import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,9 +45,15 @@ public class TransactionServiceImpl implements TransactionService {
                 .getTransactionCategoryStrategy(transactionDto.getTransactionCategory());
         categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
 
+        saveTransactionAndBankAccount(transaction, bankAccount);
+    }
+
+    @Transactional
+    private void saveTransactionAndBankAccount(Transaction transaction, BankAccount bankAccount) {
         transactionRepository.save(transaction);
         bankAccountRepository.save(bankAccount);
     }
+
 
     @Override
     public TransactionDto getTransaction(UUID id) {
