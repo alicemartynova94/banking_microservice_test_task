@@ -33,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
     public void saveTransaction(TransactionDto transactionDto) {
         Double transactionDtoSum = transactionDto.getTransactionSum();
 
-        if (transactionDtoSum <= 0 || transactionDtoSum == null) {
+        if (transactionDtoSum <= 0) {
             throw new InvalidTransactionSumException();
         }
 

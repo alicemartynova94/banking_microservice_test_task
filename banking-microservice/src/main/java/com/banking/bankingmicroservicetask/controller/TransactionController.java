@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +68,7 @@ public class TransactionController {
             @ApiResponse(responseCode = "400", description = "Invalid transaction data. Transaction is not found.")
     })
     @PostMapping("/transactions")
-    public TransactionDto addNewTransaction(@RequestBody TransactionDto transactionDto) {
+    public TransactionDto addNewTransaction(@Valid @RequestBody TransactionDto transactionDto) {
         transactionService.saveTransaction(transactionDto);
         return transactionDto;
     }
