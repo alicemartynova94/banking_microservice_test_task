@@ -65,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactionsList = transactionRepository.findAllByBankAccountIdAndLimitExceededIsTrue(accountId);
 
         if (transactionsList.isEmpty()) {
-            System.out.println("There are no transactions that exceeded limit.");
+            log.warn("List is empty.");
         }
 
         return transactionsList;
