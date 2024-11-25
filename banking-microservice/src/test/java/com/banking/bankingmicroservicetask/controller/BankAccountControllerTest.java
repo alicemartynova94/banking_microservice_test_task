@@ -45,7 +45,7 @@ public class BankAccountControllerTest {
     private TransactionService transactionService;
     @MockBean
     private TransactionLimitService transactionLimit;
-    
+
     private UUID accountId;
     private BankAccountDto bankAccountDto;
 
