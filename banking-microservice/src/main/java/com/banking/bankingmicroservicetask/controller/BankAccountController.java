@@ -19,9 +19,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class BankAccountController implements BankAccountApi {
 @Tag(name = "Bank Account API", description = "Operations related to bank accounts.")
-public class BankAccountController {
+public class BankAccountController implements BankAccountApi {
 
     private final BankAccountService bankAccountService;
 
