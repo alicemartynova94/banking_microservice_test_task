@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="accountResult">
+    <table>
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="account : ${accountResult}">
+            <td th:text="${account.accountNumber}"></td>
+            <td>
+                <a href="#" th:text="${account.id}"
+                   th:onclick="'updateDetail(this)'"
+                   th:data-id="${account.id}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
