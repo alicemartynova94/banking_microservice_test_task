@@ -21,3 +21,7 @@ spring:
       ddl-auto: validate
     database: postgresql
 
+banking:
+  service:
+    url: ${BANKING_SERVICE_URL:http://localhost:8080}
+
