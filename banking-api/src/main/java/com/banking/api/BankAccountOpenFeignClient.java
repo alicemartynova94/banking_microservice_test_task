@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "banking-service", url = "${banking.service.url}")
-public interface BankAccountClient extends BankAccountApi {
+public interface BankAccountOpenFeignClient extends BankAccountApi {
 
     @Override
     @GetMapping("/api/accounts/{id}")
     BankAccountDto getAccount(@PathVariable("id") UUID id);
 
-    @GetMapping("/api/accounts/{id}")
-    List<BankAccountDto> getAll(@PathVariable("id") UUID id);
+    @GetMapping("/api/accounts")
+    List<BankAccountDto> getAll();
 
     @Override
     @PostMapping("/api/accounts")

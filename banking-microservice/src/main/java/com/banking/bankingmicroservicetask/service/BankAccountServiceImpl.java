@@ -55,6 +55,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         log.debug("Deleted bank account with id: {}", id);
     }
 
+    @Override
+    public List<BankAccountDto> getAll() {
+        return List.of();
+    }
+
     @Scheduled(cron = "#{@bankAccountServiceProperties.cron}")
     public void updateLimits() {
         List<BankAccount> accounts = bankAccountRepository.findAll();

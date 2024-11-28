@@ -2,6 +2,7 @@ package com.banking.bankingmicroservicetask.service;
 
 import com.banking.dto.BankAccountDto;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface BankAccountService {
@@ -10,4 +11,6 @@ public interface BankAccountService {
     public BankAccountDto getAccount(UUID id);
 
     public void deleteAccount(UUID id);
+
+    public List<BankAccountDto> getAll();
 }
