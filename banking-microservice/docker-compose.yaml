@@ -13,7 +13,7 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=MyPostYang1994@!
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
   db:
@@ -21,4 +21,4 @@ services:
     container_name: db
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=MyPostYang1994@!
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
