@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Accounts</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <script>
+        function updateDetail(link) {
+            const accountId = link.getAttribute("data-id");
+
+            fetch(`/banking/accounts/detail/${accountId}`)
+                .then(response => response.text())
+                .then(html => {
+                    const detailSection = document.getElementById("detail");
+                    detailSection.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading detail:", error);
+                });
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/banking/accounts" class="menu-button"
+                   th:classappend="${tab == 'accounts' ? 'active' : ''}">
+                    Accounts</a></li>
+            <li><a href="/home" class="menu-button">Other</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section class="content">
+        <div id="accounts"
+             th:replace="${accountResult != null and !accountResult.isEmpty()}
+             ? ~{accounts.html :: accountResult}
+             : ~{}">
+        </div>
+        <div id="accounts-empty" th:if="${accountResult == null or accountResult.isEmpty()}">
+            <p>No data available.</p>
+        </div>
+        <div id="detail" th:if="${accountResult != null and !accountResult.isEmpty()}">
+            <h2>Detail</h2>
+            <p>Select an ID to view details here.</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

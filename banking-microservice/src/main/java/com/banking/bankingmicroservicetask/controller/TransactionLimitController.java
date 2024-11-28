@@ -1,5 +1,6 @@
 package com.banking.bankingmicroservicetask.controller;
 
+import com.banking.bankingmicroservicetask.service.TransactionService;
 import com.banking.dto.TransactionLimitDto;
 import com.banking.bankingmicroservicetask.service.TransactionLimitService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +25,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 @Tag(name = "Transaction Limit API", description = "Operations related to transaction limit.")
 public class TransactionLimitController {
-    @Autowired
-    TransactionLimitService transactionLimitService;
+
+    private final TransactionLimitService transactionLimitService;
 
     @Operation(summary = "Save a limit",
             description = "Save a new limit into database.")

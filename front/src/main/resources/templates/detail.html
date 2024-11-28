@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detail</title>
+</head>
+<body>
+<div th:fragment="content">
+    <p><strong>ID:</strong> <span th:text="${account.id}"></span></p>
+    <p><strong>Account Number:</strong> <span th:text="${account.accountNumber}"></span></p>
+    <p><strong>Account Holder:</strong> <span th:text="${account.accountHolder}"></span></p>
+    <p><strong>Available Funds:</strong> <span th:text="${account.availableFunds}"></span></p>
+</div>
+</body>
+</html>
