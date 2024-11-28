@@ -60,7 +60,7 @@ public class TransactionServiceImplTest {
 
     @Test
     public void saveTransaction_ExpectNoSuchBankAccountException() {
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(id)).willReturn(Optional.empty());
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(id)).willReturn(Optional.empty());
 
         Assertions.assertThrows(NoSuchBankAccountException.class, () -> {
             transactionService.saveTransaction(transactionDto);
@@ -72,7 +72,7 @@ public class TransactionServiceImplTest {
         transactionDto.setTransactionCategory(TransactionCategory.SERVICES);
         transactionDto.setTransactionSum(100.0);
 
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
         given(transactionMapper.TransactionDtoToTransaction(transactionDto)).willReturn(new Transaction());
 
         transactionService.saveTransaction(transactionDto);
@@ -86,7 +86,7 @@ public class TransactionServiceImplTest {
     public void saveTransactionWithInvalidSum_ExpectInvalidTransactionSumException() {
         transactionDto.setTransactionSum(-1.0);
 
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
 
         Assertions.assertThrows(InvalidTransactionSumException.class, () -> {
             transactionService.saveTransaction(transactionDto);
@@ -99,7 +99,7 @@ public class TransactionServiceImplTest {
         transactionDto.setTransactionCategory(TransactionCategory.SERVICES);
         transactionDto.setTransactionSum(300.0);
 
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
         given(transactionMapper.TransactionDtoToTransaction(transactionDto)).willReturn(transaction);
 
         transactionService.saveTransaction(transactionDto);

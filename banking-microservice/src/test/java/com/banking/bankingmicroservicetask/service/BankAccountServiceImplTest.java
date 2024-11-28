@@ -87,7 +87,7 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void getAccountWithValidIdExpectCorrectMappingAndBankAccountIsReturned() {
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(accountId)).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.of(bankAccount));
         given(bankAccountMapper.bankAccountToBankAccountDto(bankAccount)).willReturn(bankAccountDto);
 
         BankAccountDto result = bankAccountService.getAccount(accountId);
@@ -97,7 +97,7 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void getAccountWithInvalidIdExpectNoSuchBankAccountException() {
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(accountId)).willReturn(Optional.empty());
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> bankAccountService.getAccount(accountId))
                 .isInstanceOf(NoSuchBankAccountException.class);
@@ -105,23 +105,23 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void deleteAccountWithValidIdExpectAccountIsDeleted() {
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(accountId)).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.of(bankAccount));
 
         bankAccountService.deleteAccount(accountId);
 
-        verify(bankAccountRepository, times(1)).findByIdAndDeletedTimeIsNull(accountId);
+        verify(bankAccountRepository, times(1)).findByIdAndBankAccountDeletedTimeIsNull(accountId);
         verify(bankAccountRepository, times(1)).save(bankAccount);
         assertNotNull(bankAccount.getBankAccountDeletedTime());
     }
 
     @Test
     public void deleteAccountWithInvalidIdExpectNoSuchBankAccountException() {
-        given(bankAccountRepository.findByIdAndDeletedTimeIsNull(accountId)).willReturn(Optional.empty());
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> bankAccountService.getAccount(accountId))
                 .isInstanceOf(NoSuchBankAccountException.class);
 
-        verify(bankAccountRepository, times(1)).findByIdAndDeletedTimeIsNull(accountId);
+        verify(bankAccountRepository, times(1)).findByIdAndBankAccountDeletedTimeIsNull(accountId);
         verify(bankAccountRepository, never()).deleteById(accountId);
     }
 }

@@ -59,7 +59,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto getTransaction(UUID id) {
         log.debug("Fetching transaction with id: {}", id);
 
-        Transaction transaction = transactionRepository.findByIdAndDeletedTimeIsNull(id)
+        Transaction transaction = transactionRepository.findByIdAndTransactionDeletedTimeIsNull(id)
                 .orElseThrow(NoSuchTransaction::new);
 
         return transactionMapper.transactionToTransactionDto(transaction);
@@ -80,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(UUID id) {
-        Transaction transaction = transactionRepository.findByIdAndDeletedTimeIsNull(id)
+        Transaction transaction = transactionRepository.findByIdAndTransactionDeletedTimeIsNull(id)
                 .orElseThrow(NoSuchTransaction::new);
 
         log.debug("Deleting transaction with id: {}", id);

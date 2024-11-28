@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     List<Transaction> findAllByBankAccountIdAndLimitExceededIsTrue(UUID accountId);
 
-    Optional<Transaction> findByIdAndDeletedTimeIsNull(UUID id);
+    Optional<Transaction> findByIdAndTransactionDeletedTimeIsNull(UUID id);
 }

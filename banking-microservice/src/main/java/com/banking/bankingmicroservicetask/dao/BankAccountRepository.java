@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> {
-    Optional<BankAccount> findByIdAndDeletedTimeIsNull(UUID id);
+    Optional<BankAccount> findByIdAndBankAccountDeletedTimeIsNull(UUID id);
 }

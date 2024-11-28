@@ -7,7 +7,6 @@ import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException
 import com.banking.bankingmicroservicetask.mappers.BankAccountMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +38,14 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccountDto getAccount(UUID id) {
         log.debug("Fetching bank account with id: {}", id);
 
-        BankAccount bankAccount = bankAccountRepository.findByIdAndDeletedTimeIsNull(id).orElseThrow(NoSuchBankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(id).orElseThrow(NoSuchBankAccountException::new);
 
         return bankAccountMapper.bankAccountToBankAccountDto(bankAccount);
     }
 
     @Override
     public void deleteAccount(UUID id) {
-        BankAccount bankAccount = bankAccountRepository.findByIdAndDeletedTimeIsNull(id).orElseThrow(NoSuchBankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(id).orElseThrow(NoSuchBankAccountException::new);
 
         log.debug("Deleting bank account with id: {}", id);
 
