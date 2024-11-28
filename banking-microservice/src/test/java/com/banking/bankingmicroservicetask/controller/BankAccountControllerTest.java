@@ -34,11 +34,12 @@ import java.util.UUID;
 
 
 @WebMvcTest
-@RequiredArgsConstructor
 public class BankAccountControllerTest {
 
-    private final MockMvc mockMvc;
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
     @MockBean
     private BankAccountService bankAccountService;
     @MockBean
