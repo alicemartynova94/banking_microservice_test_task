@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "banking-service", url = "${banking.service.url}")
+@FeignClient(name = "banking-microservice")
 public interface BankAccountOpenFeignClient extends BankAccountApi {
 
     @Override

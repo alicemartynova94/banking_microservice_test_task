@@ -55,10 +55,14 @@ public class BankAccountServiceImpl implements BankAccountService {
         log.debug("Deleted bank account with id: {}", id);
     }
 
-    @Override
-    public List<BankAccountDto> getAll() {
-        return List.of();
-    }
+  @Override
+  //TODO flux
+  public List<BankAccountDto> getAll() {
+    log.debug("Fetching all bank accounts");
+    return bankAccountRepository.findAll().stream()
+        .map(bankAccountMapper::bankAccountToBankAccountDto)
+        .toList();
+  }
 
     @Scheduled(cron = "#{@bankAccountServiceProperties.cron}")
     public void updateLimits() {

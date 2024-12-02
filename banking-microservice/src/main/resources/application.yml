@@ -1,4 +1,8 @@
+server:
+  port: 8085
 spring:
+  application:
+    name: banking-microservice
   springdoc:
     api-docs:
       path: /api-docs
@@ -9,7 +13,6 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
   datasource:
-    platform: postgres
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/banking?connectionTimeZone=UTC
     username: postgres
@@ -19,9 +22,8 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: validate
-    database: postgresql
-
-banking:
-  service:
-    url: ${BANKING_SERVICE_URL:http://localhost:8080}
+    database: POSTGRESQL
+  sql:
+    init:
+      platform: postgres
 

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 @RequiredArgsConstructor
 @Tag(name = "Bank Account API", description = "Operations related to bank accounts.")
 public class BankAccountController implements BankAccountApi {
@@ -38,7 +38,7 @@ public class BankAccountController implements BankAccountApi {
             @ApiResponse(responseCode = "200", description = "Bank account retrieved successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BankAccountDto.class))),
             @ApiResponse(responseCode = "404", description = "Bank account limit is not found.")
     })
-    @GetMapping("/account/{id}")
+    @GetMapping("/{id}")
     public BankAccountDto getAccount(@Parameter(
             description = "ID of the bank account to be retrieved.",
             required = true)
@@ -64,7 +64,7 @@ public class BankAccountController implements BankAccountApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Bank account created successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BankAccountDto.class)))
     })
-    @PostMapping("/accounts")
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public BankAccountDto addNewAccount(@RequestBody BankAccountDto bankAccountDto) {
         bankAccountService.saveAccount(bankAccountDto);
@@ -78,7 +78,7 @@ public class BankAccountController implements BankAccountApi {
             @ApiResponse(responseCode = "204", description = "Bank account deleted successfully."),
             @ApiResponse(responseCode = "404", description = "Bank account not found.")
     })
-    @DeleteMapping("/account/{id}")
+    @DeleteMapping("/{id}")
     public void deleteAccount(@Parameter(
             description = "ID of the bank account to be deleted.",
             required = true)
