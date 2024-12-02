@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,6 +38,11 @@ public class BankAccountController implements BankAccountApi {
             required = true)
                                      @PathVariable UUID id) {
         return bankAccountService.getAccount(id);
+    }
+
+    @Override
+    public List<BankAccountDto> getAllAccounts() {
+        return bankAccountService.getAllAccounts();
     }
 
     @Override
