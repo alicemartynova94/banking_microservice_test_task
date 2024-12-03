@@ -3,6 +3,7 @@ package com.banking;
 import com.banking.api.BankAccountApi;
 import com.banking.dto.BankAccountDto;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BankAccountClient implements BankAccountApi {
@@ -19,5 +20,10 @@ public class BankAccountClient implements BankAccountApi {
     @Override
     public void deleteAccount(UUID id) {
 
+    }
+
+    @Override
+    public List<BankAccountDto> getAll() {
+        return List.of();
     }
 }

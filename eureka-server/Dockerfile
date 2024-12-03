@@ -4,16 +4,13 @@ WORKDIR /app
 
 # Copy the entire project
 COPY . .
+
 # Install the parent POM into the local repository
 WORKDIR /app
 RUN mvn clean install -N -DskipTests
 
-# Build the banking-api module
-WORKDIR /app/banking-api
-RUN mvn clean install -DskipTests
-
-# Move to the banking-microservice directory and build the JAR
-WORKDIR /app/banking-microservice
+# Move to the eureka-server directory and build the JAR
+WORKDIR /app/eureka-server
 RUN mvn clean package -DskipTests
 
 # Step 2: Create the final image
@@ -21,7 +18,7 @@ FROM openjdk:21-jdk
 WORKDIR /app
 
 # Copy the built JAR file
-COPY --from=build /app/banking-microservice/target/banking-microservice-0.1.0-SNAPSHOT.jar app.jar
+COPY --from=build /app/eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar eureka-server.jar
 
 # Run the app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "eureka-server.jar"]

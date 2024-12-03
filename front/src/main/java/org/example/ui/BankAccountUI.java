@@ -1,5 +1,6 @@
 package org.example.ui;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.example.services.BankAccountService;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class BankAccountUI {
             @PathVariable String id,
             Model model
     ){
-        model.addAttribute("account", service.getById(id));
+        model.addAttribute("account", service.getAccount(UUID.fromString(id)));
         return "detail";
     }
 

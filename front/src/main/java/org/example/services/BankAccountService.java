@@ -1,48 +1,42 @@
 package org.example.services;
 
+import com.banking.api.BankAccountOpenFeignClient;
 import com.banking.dto.BankAccountDto;
-import org.springframework.stereotype.Service;
-
-import java.nio.file.FileSystemNotFoundException;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
-import java.util.stream.IntStream;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Service
+@RestController
+@RequestMapping("/front/accounts")
+@RequiredArgsConstructor
 public class BankAccountService {
 
-    private final List<BankAccountDto> dtos = new ArrayList<>();
+    private final BankAccountOpenFeignClient bankAccountOpenFeignClient;
 
+    @GetMapping("/{id}")
+    public BankAccountDto getAccount(@PathVariable UUID id) {
+        return bankAccountOpenFeignClient.getAccount(id);
+    }
+
+    @GetMapping
     public List<BankAccountDto> getAll() {
-        if (dtos.isEmpty()) {
-            IntStream.range(1, 15).forEach(id -> {
-                var bankAccountDto = temporaryAccount(id);
-                dtos.add(bankAccountDto);
-            });
-        }
-        return dtos;
+        return bankAccountOpenFeignClient.getAll();
     }
 
-    public BankAccountDto getById(String id){
-        return dtos.stream()
-                .filter(a-> a.getId().toString().equals(id))
-                .findFirst()
-                .orElseThrow(()-> new FileSystemNotFoundException("error"));
+    @PostMapping
+    public BankAccountDto addNewAccount(@RequestBody BankAccountDto bankAccountDto) {
+        return bankAccountOpenFeignClient.addNewAccount(bankAccountDto);
     }
 
-    private BankAccountDto temporaryAccount(Integer id) {
-        Random random = new Random();
-        int monthIndex = random.nextInt(Month.values().length);
-        Month randomMonth = Month.values()[monthIndex];
-        return BankAccountDto.builder()
-                .id(UUID.randomUUID())
-                .accountHolder(randomMonth.toString())
-                .availableFunds(random.nextDouble())
-                .accountNumber(id)
-                .build();
+    @DeleteMapping("/{id}")
+    public void deleteAccount(@PathVariable UUID id) {
+        bankAccountOpenFeignClient.deleteAccount(id);
     }
-
 }
