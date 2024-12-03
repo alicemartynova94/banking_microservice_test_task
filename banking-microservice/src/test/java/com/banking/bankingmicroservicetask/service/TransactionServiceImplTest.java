@@ -1,14 +1,19 @@
 package com.banking.bankingmicroservicetask.service;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
 import com.banking.bankingmicroservicetask.dao.TransactionRepository;
-import com.banking.dto.TransactionDto;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.entity.Transaction;
-import com.banking.enums.TransactionCategory;
 import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionSumException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
+import com.banking.dto.TransactionDto;
+import com.banking.enums.TransactionCategory;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -17,14 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.Optional;
-import java.util.UUID;
+import reactor.core.publisher.Mono;
 
 @Disabled
 @ExtendWith(MockitoExtension.class)
@@ -60,7 +58,7 @@ public class TransactionServiceImplTest {
 
     @Test
     public void saveTransaction_ExpectNoSuchBankAccountException() {
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(id)).willReturn(Optional.empty());
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(id)).willReturn(Mono.empty());
 
         Assertions.assertThrows(NoSuchBankAccountException.class, () -> {
             transactionService.saveTransaction(transactionDto);
@@ -72,7 +70,7 @@ public class TransactionServiceImplTest {
         transactionDto.setTransactionCategory(TransactionCategory.SERVICES);
         transactionDto.setTransactionSum(100.0);
 
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Mono.just(bankAccount));
         given(transactionMapper.TransactionDtoToTransaction(transactionDto)).willReturn(new Transaction());
 
         transactionService.saveTransaction(transactionDto);
@@ -86,7 +84,7 @@ public class TransactionServiceImplTest {
     public void saveTransactionWithInvalidSum_ExpectInvalidTransactionSumException() {
         transactionDto.setTransactionSum(-1.0);
 
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Mono.just(bankAccount));
 
         Assertions.assertThrows(InvalidTransactionSumException.class, () -> {
             transactionService.saveTransaction(transactionDto);
@@ -99,7 +97,7 @@ public class TransactionServiceImplTest {
         transactionDto.setTransactionCategory(TransactionCategory.SERVICES);
         transactionDto.setTransactionSum(300.0);
 
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Optional.of(bankAccount));
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())).willReturn(Mono.just(bankAccount));
         given(transactionMapper.TransactionDtoToTransaction(transactionDto)).willReturn(transaction);
 
         transactionService.saveTransaction(transactionDto);

@@ -2,28 +2,28 @@ package com.banking;
 
 import com.banking.api.BankAccountApi;
 import com.banking.dto.BankAccountDto;
-
-import java.util.List;
 import java.util.UUID;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class BankAccountClient implements BankAccountApi {
-    @Override
-    public BankAccountDto getAccount(UUID id) {
-        return null;
-    }
+  @Override
+  public Mono<BankAccountDto> getAccount(UUID id) {
+    return Mono.empty();
+  }
 
-    @Override
-    public BankAccountDto addNewAccount(BankAccountDto bankAccountDto) {
-        return null;
-    }
+  @Override
+  public Mono<Void> addNewAccount(BankAccountDto bankAccountDto) {
+    return Mono.empty();
+  }
 
-    @Override
-    public void deleteAccount(UUID id) {
+  @Override
+  public Mono<Void> deleteAccount(UUID id) {
+    return Mono.empty();
+  }
 
-    }
-
-    @Override
-    public List<BankAccountDto> getAll() {
-        return List.of();
-    }
+  @Override
+  public Flux<BankAccountDto> getAll() {
+    return Flux.empty();
+  }
 }

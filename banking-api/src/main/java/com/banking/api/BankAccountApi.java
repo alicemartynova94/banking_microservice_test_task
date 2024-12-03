@@ -1,17 +1,17 @@
 package com.banking.api;
 
 import com.banking.dto.BankAccountDto;
-
-import java.util.List;
 import java.util.UUID;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface BankAccountApi {
 
-    BankAccountDto getAccount(UUID id);
+    Mono<BankAccountDto> getAccount(UUID id);
 
-    BankAccountDto addNewAccount(BankAccountDto bankAccountDto);
+    Mono<Void> addNewAccount(BankAccountDto bankAccountDto);
 
-    void deleteAccount(UUID id);
+    Mono<Void> deleteAccount(UUID id);
 
-    List<BankAccountDto> getAll();
+    Flux<BankAccountDto> getAll();
 }

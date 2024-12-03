@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -39,7 +40,7 @@ public class BankAccountController implements BankAccountApi {
             @ApiResponse(responseCode = "404", description = "Bank account limit is not found.")
     })
     @GetMapping("/{id}")
-    public BankAccountDto getAccount(@Parameter(
+    public Mono<BankAccountDto> getAccount(@Parameter(
             description = "ID of the bank account to be retrieved.",
             required = true)
                                      @PathVariable UUID id) {
@@ -54,7 +55,7 @@ public class BankAccountController implements BankAccountApi {
         @ApiResponse(responseCode = "404", description = "No bank accounts found.")
     })
     @GetMapping
-    public List<BankAccountDto> getAll() {
+    public Flux<BankAccountDto> getAll() {
         return bankAccountService.getAll();
     }
 
@@ -66,9 +67,8 @@ public class BankAccountController implements BankAccountApi {
     })
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public BankAccountDto addNewAccount(@RequestBody BankAccountDto bankAccountDto) {
-        bankAccountService.saveAccount(bankAccountDto);
-        return bankAccountDto;
+    public Mono<Void> addNewAccount(@RequestBody BankAccountDto bankAccountDto) {
+        return bankAccountService.saveAccount(bankAccountDto);
     }
 
     @Override
@@ -78,12 +78,13 @@ public class BankAccountController implements BankAccountApi {
             @ApiResponse(responseCode = "204", description = "Bank account deleted successfully."),
             @ApiResponse(responseCode = "404", description = "Bank account not found.")
     })
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deleteAccount(@Parameter(
+    public Mono<Void> deleteAccount(@Parameter(
             description = "ID of the bank account to be deleted.",
             required = true)
             @PathVariable UUID id) {
-        bankAccountService.deleteAccount(id);
+        return bankAccountService.deleteAccount(id);
     }
 }
 
