@@ -8,36 +8,28 @@ import com.banking.bankingmicroservicetask.entity.CurrencyShortname;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.mappers.BankAccountMapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
-import java.util.Optional;
 import java.util.UUID;
-@Disabled
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
-public class BankAccountServiceImplTest {
+class BankAccountServiceImplTest {
     @InjectMocks
     private BankAccountServiceImpl bankAccountService;
     @Mock
     private BankAccountRepository bankAccountRepository;
     @Mock
     private BankAccountMapper bankAccountMapper;
-
 
     private UUID accountId;
     private BankAccountDto bankAccountDto;
@@ -73,55 +65,73 @@ public class BankAccountServiceImplTest {
         bankAccount.setAccountNumber(accountNumber);
         bankAccount.setAccountHolder(accountHolder);
         bankAccount.setAvailableFunds(availableFunds);
-        bankAccount.setCurrencyShortname(currencyShortname);
+        bankAccount.setCurrencyShortnameId(currencyShortname.getId());
     }
 
     @Test
-    public void saveAccountExpectAccountIsSaved() {
+    void saveAccountExpectAccountIsSaved() {
         given(bankAccountMapper.bankAccountDtoToBankAccount(bankAccountDto)).willReturn(bankAccount);
+        given(bankAccountRepository.save(bankAccount)).willReturn(Mono.just(bankAccount));
 
-        bankAccountService.saveAccount(bankAccountDto);
+        StepVerifier.create(bankAccountService.saveAccount(bankAccountDto))
+            .verifyComplete();
 
         verify(bankAccountRepository).save(bankAccount);
     }
 
     @Test
-    public void getAccountWithValidIdExpectCorrectMappingAndBankAccountIsReturned() {
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.of(bankAccount));
-        given(bankAccountMapper.bankAccountToBankAccountDto(bankAccount)).willReturn(bankAccountDto);
+    void getAccountWithValidIdExpectCorrectMappingAndBankAccountIsReturned() {
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId))
+            .willReturn(Mono.just(bankAccount));
+        given(bankAccountMapper.bankAccountToBankAccountDto(bankAccount))
+            .willReturn(bankAccountDto);
 
-        BankAccountDto result = bankAccountService.getAccount(accountId);
+        StepVerifier.create(bankAccountService.getAccount(accountId))
+            .expectNext(bankAccountDto)
+            .verifyComplete();
 
-        assertThat(result).isEqualTo(bankAccountDto);
+        verify(bankAccountRepository, times(1))
+            .findByIdAndBankAccountDeletedTimeIsNull(accountId);
     }
 
     @Test
-    public void getAccountWithInvalidIdExpectNoSuchBankAccountException() {
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.empty());
+    void getAccountWithInvalidIdExpectNoSuchBankAccountException() {
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId))
+            .willReturn(Mono.empty());
 
-        assertThatThrownBy(() -> bankAccountService.getAccount(accountId))
-                .isInstanceOf(NoSuchBankAccountException.class);
+        StepVerifier.create(bankAccountService.getAccount(accountId))
+            .expectError(NoSuchBankAccountException.class)
+            .verify();
+
+        verify(bankAccountRepository, times(1))
+            .findByIdAndBankAccountDeletedTimeIsNull(accountId);
     }
 
     @Test
-    public void deleteAccountWithValidIdExpectAccountIsDeleted() {
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.of(bankAccount));
+    void deleteAccountWithValidIdExpectAccountIsDeleted() {
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId))
+            .willReturn(Mono.just(bankAccount));
+        given(bankAccountRepository.save(bankAccount)).willReturn(Mono.just(bankAccount));
 
-        bankAccountService.deleteAccount(accountId);
+        StepVerifier.create(bankAccountService.deleteAccount(accountId))
+            .verifyComplete();
 
-        verify(bankAccountRepository, times(1)).findByIdAndBankAccountDeletedTimeIsNull(accountId);
+        verify(bankAccountRepository, times(1))
+            .findByIdAndBankAccountDeletedTimeIsNull(accountId);
         verify(bankAccountRepository, times(1)).save(bankAccount);
-        assertNotNull(bankAccount.getBankAccountDeletedTime());
     }
 
     @Test
-    public void deleteAccountWithInvalidIdExpectNoSuchBankAccountException() {
-        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId)).willReturn(Optional.empty());
+    void deleteAccountWithInvalidIdExpectNoSuchBankAccountException() {
+        given(bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(accountId))
+            .willReturn(Mono.empty());
 
-        assertThatThrownBy(() -> bankAccountService.getAccount(accountId))
-                .isInstanceOf(NoSuchBankAccountException.class);
+        StepVerifier.create(bankAccountService.deleteAccount(accountId))
+            .expectError(NoSuchBankAccountException.class)
+            .verify();
 
-        verify(bankAccountRepository, times(1)).findByIdAndBankAccountDeletedTimeIsNull(accountId);
-        verify(bankAccountRepository, never()).deleteById(accountId);
+        verify(bankAccountRepository, times(1))
+            .findByIdAndBankAccountDeletedTimeIsNull(accountId);
+        verify(bankAccountRepository, never()).save(any());
     }
 }

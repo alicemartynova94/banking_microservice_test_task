@@ -28,10 +28,11 @@ import static org.mockito.ArgumentMatchers.any;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+import reactor.core.publisher.Mono;
 
 @Disabled
 @ExtendWith(MockitoExtension.class)
-public class TransactionLimitServiceImplTest {
+class TransactionLimitServiceImplTest {
     @InjectMocks
     TransactionLimitServiceImpl transactionLimitService;
     @Mock
@@ -57,7 +58,7 @@ public class TransactionLimitServiceImplTest {
     }
 
     @Test
-    public void updateLimit_On15thLastUpdate2MonthOneTime_ExpectSuccessfulUpdate() {
+    void updateLimit_On15thLastUpdate2MonthOneTime_ExpectSuccessfulUpdate() {
         LocalDateTime todayFixedDate = LocalDateTime.of(2024, 3, 15, 10, 30);
         LocalDateTime todayMinusMonth = todayFixedDate.minusMonths(2);
 
@@ -75,7 +76,7 @@ public class TransactionLimitServiceImplTest {
     }
 
     @Test
-    public void updateLimit_On15thLastUpdate2MonthTwoTimes_ExpectLimitUpdateFrequencyExceededException() {
+    void updateLimit_On15thLastUpdate2MonthTwoTimes_ExpectLimitUpdateFrequencyExceededException() {
         LocalDateTime todayFixedDate = LocalDateTime.of(2024, 3, 15, 10, 30);
         LocalDateTime todayMinusMonths = todayFixedDate.minusMonths(2);
 
@@ -100,7 +101,7 @@ public class TransactionLimitServiceImplTest {
     }
 
     @Test
-    public void updateLimit_On17thLastUpdate1MonthOneTime_ExpectLimitUpdateNotAllowedException() {
+    void updateLimit_On17thLastUpdate1MonthOneTime_ExpectLimitUpdateNotAllowedException() {
         LocalDateTime todayWrongDate = LocalDateTime.of(2024, 3, 17, 10, 30);
         LocalDateTime updateDate = todayWrongDate.minusMonths(1).minusDays(2);
 
@@ -117,7 +118,7 @@ public class TransactionLimitServiceImplTest {
     }
 
     @Test
-    public void updateLimit_LessThanOneMonthAgoOneTime_ExpectLimitUpdateNotAllowedException() {
+    void updateLimit_LessThanOneMonthAgoOneTime_ExpectLimitUpdateNotAllowedException() {
         LocalDateTime todayFixedDate = LocalDateTime.of(2024, 3, 5, 10, 30);
         LocalDateTime wrongUpdateDate = todayFixedDate.minusMonths(1).plusDays(15);
 

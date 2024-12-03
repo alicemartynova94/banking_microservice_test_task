@@ -1,16 +1,16 @@
 package com.banking.bankingmicroservicetask.service;
 
 import com.banking.dto.BankAccountDto;
-
-import java.util.List;
 import java.util.UUID;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface BankAccountService {
-    public void saveAccount(BankAccountDto bankAccountDto);
+    Mono<Void> saveAccount(BankAccountDto bankAccountDto);
 
-    public BankAccountDto getAccount(UUID id);
+    Mono<BankAccountDto> getAccount(UUID id);
 
-    public void deleteAccount(UUID id);
+    Mono<Void> deleteAccount(UUID id);
 
-    public List<BankAccountDto> getAll();
+    Flux<BankAccountDto> getAll();
 }
