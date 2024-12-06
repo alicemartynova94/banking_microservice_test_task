@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -41,6 +42,14 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccount bankAccount = bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(id).orElseThrow(NoSuchBankAccountException::new);
 
         return bankAccountMapper.bankAccountToBankAccountDto(bankAccount);
+    }
+
+    @Override
+    public List<BankAccountDto> getAllAccounts() {
+      return bankAccountRepository.findByBankAccountDeletedTimeIsNull()
+              .stream()
+              .map(bankAccountMapper::bankAccountToBankAccountDto)
+              .collect(Collectors.toList());
     }
 
     @Override

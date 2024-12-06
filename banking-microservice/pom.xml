@@ -6,7 +6,7 @@
         <artifactId>banking</artifactId>
         <groupId>com.banking</groupId>
         <version>0.1.0-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>banking-microservice</artifactId>
     <version>0.1.0-SNAPSHOT</version>
