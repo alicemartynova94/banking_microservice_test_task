@@ -41,6 +41,7 @@ public class BankAccountController implements BankAccountApi {
     }
 
     @Override
+    @GetMapping("/accounts")
     public List<BankAccountDto> getAllAccounts() {
         return bankAccountService.getAllAccounts();
     }
