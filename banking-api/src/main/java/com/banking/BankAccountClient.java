@@ -2,9 +2,12 @@ package com.banking;
 
 import com.banking.api.BankAccountApi;
 import com.banking.dto.BankAccountDto;
-import com.banking.wrapper.BankAccountDtoList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -17,14 +20,19 @@ public class BankAccountClient implements BankAccountApi {
     private final RestTemplate restTemplate;
 
     @Override
-    public BankAccountDto getAccount(UUID id) {
+    public BankAccountDto getAccount(@PathVariable UUID id) {
             return restTemplate.getForObject("/account/{id}", BankAccountDto.class, id);
     }
 
     @Override
     public List<BankAccountDto> getAllAccounts() {
-        BankAccountDtoList response = restTemplate.getForObject("/accounts", BankAccountDtoList.class);
-        return response.getAccountDtos();
+        ResponseEntity<List<BankAccountDto>> response = restTemplate.exchange(
+                "/accounts",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<BankAccountDto>>() {}
+        );
+        return response.getBody();
     }
 
     @Override
