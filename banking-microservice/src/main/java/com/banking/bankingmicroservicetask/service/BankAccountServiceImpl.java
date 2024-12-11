@@ -57,7 +57,7 @@ public class BankAccountServiceImpl implements BankAccountService {
           account.setBankAccountDeletedTime(LocalDateTime.now());
           return bankAccountRepository.save(account);
         })
-        .doOnSuccess((account) -> log.debug("Deleted bank account with id: {}", id))
+        .doOnSuccess(account -> log.debug("Deleted bank account with id: {}", id))
         .then();
   }
 
@@ -73,18 +73,21 @@ public class BankAccountServiceImpl implements BankAccountService {
     bankAccountRepository.findAll()
         .publishOn(Schedulers.boundedElastic())
         .flatMap(account -> {
-          TransactionLimit goodsLimit = transactionLimitRepository.findById(account.getTransactionLimitGoodsId())
-              .orElseThrow(
-                  () -> new RuntimeException("Goods TransactionLimit not found for account: " + account.getId()));
-          TransactionLimit servicesLimit = transactionLimitRepository.findById(account.getTransactionLimitServicesId())
-              .orElseThrow(
-                  () -> new RuntimeException("Services TransactionLimit not found for account: " + account.getId()));
-
-          account.setLimitGoods(goodsLimit.getLimitSum());
-          account.setLimitServices(servicesLimit.getLimitSum());
-
-          return bankAccountRepository.save(account);
-        })
-        .subscribe();
+          Mono<TransactionLimit> goodsLimit = transactionLimitRepository
+              .findById(account.getTransactionLimitGoodsId())
+              .switchIfEmpty(
+                  Mono.error(new RuntimeException("Goods TransactionLimit not found for account: " + account.getId())));
+          Mono<TransactionLimit> servicesLimit = transactionLimitRepository
+              .findById(account.getTransactionLimitServicesId())
+              .switchIfEmpty(
+                  Mono.error(
+                      new RuntimeException("Services TransactionLimit not found for account: " + account.getId())));
+          return goodsLimit.zipWith(servicesLimit, (goods, services) -> {
+                account.setLimitGoods(goods.getLimitSum());
+                account.setLimitServices(services.getLimitSum());
+                return account;
+              })
+              .flatMap(bankAccountRepository::save);
+        }).blockLast();
   }
 }

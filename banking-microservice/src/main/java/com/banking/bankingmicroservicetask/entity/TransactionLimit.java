@@ -1,5 +1,7 @@
 package com.banking.bankingmicroservicetask.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -21,9 +23,11 @@ public class TransactionLimit {
     @Column("transaction_category")
     private TransactionCategory transactionCategory;
 
+    @CreationTimestamp
     @Column("limit_creation_time")
     private LocalDateTime limitCreationTime;
 
+    @UpdateTimestamp
     @Column("limit_last_update_time")
     private LocalDateTime limitLastUpdateTime;
 

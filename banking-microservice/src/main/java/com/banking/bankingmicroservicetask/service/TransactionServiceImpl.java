@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionalOperator;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -24,72 +26,69 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
-    private final TransactionRepository transactionRepository;
-    private final BankAccountRepository bankAccountRepository;
+  private final TransactionRepository transactionRepository;
+  private final BankAccountRepository bankAccountRepository;
+  private final TransactionalOperator transactionalOperator;
 
-    @Autowired
-    private TransactionMapper transactionMapper;
+  @Autowired
+  private TransactionMapper transactionMapper;
 
-    @Override
-    public void saveTransaction(TransactionDto transactionDto) {
-        Double transactionDtoSum = transactionDto.getTransactionSum();
+  @Override
+  public Mono<Void> saveTransaction(TransactionDto transactionDto) {
+    Double transactionDtoSum = transactionDto.getTransactionSum();
 
-        if (transactionDtoSum <= 0) {
-            throw new InvalidTransactionSumException();
-        }
-
-        BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId())
-            .switchIfEmpty(Mono.error(new NoSuchBankAccountException()))
-            .block();
-        Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
-
-        TransactionCategoryStrategy categoryStrategy = TransactionCategoryFactory
-                .getTransactionCategoryStrategy(transactionDto.getTransactionCategory());
-        categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
-
-        saveTransactionAndBankAccount(transaction, bankAccount);
+    if (transactionDtoSum <= 0) {
+      throw new InvalidTransactionSumException();
     }
 
-    @Transactional
-    public void saveTransactionAndBankAccount(Transaction transaction, BankAccount bankAccount) {
-        transactionRepository.save(transaction);
-        bankAccountRepository.save(bankAccount).block();
-    }
+    BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId())
+        .switchIfEmpty(Mono.error(new NoSuchBankAccountException()))
+        .block();
+    Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
 
+    TransactionCategoryStrategy categoryStrategy = TransactionCategoryFactory
+        .getTransactionCategoryStrategy(transactionDto.getTransactionCategory());
+    categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
 
-    @Override
-    public TransactionDto getTransaction(UUID id) {
-        log.debug("Fetching transaction with id: {}", id);
+    return saveTransactionAndBankAccount(transaction, bankAccount);
+  }
 
-        Transaction transaction = transactionRepository.findByIdAndTransactionDeletedTimeIsNull(id)
-                .orElseThrow(NoSuchTransaction::new);
+  //    @Transactional
+  public Mono<Void> saveTransactionAndBankAccount(Transaction transaction, BankAccount bankAccount) {
+    return transactionalOperator.transactional(
+        Mono.zip(
+            transactionRepository.save(transaction),
+            bankAccountRepository.save(bankAccount))).then();
+  }
 
-        return transactionMapper.transactionToTransactionDto(transaction);
-    }
+  @Override
+  public Mono<TransactionDto> getTransaction(UUID id) {
+    log.debug("Fetching transaction with id: {}", id);
+    return transactionRepository.findByIdAndTransactionDeletedTimeIsNull(id)
+        .switchIfEmpty(Mono.error(NoSuchTransaction::new))
+        .map(transactionMapper::transactionToTransactionDto);
+  }
 
-    @Override
-    public List<Transaction> getExceededLimitTransactions(UUID accountId) {
-        log.debug("Fetching all transactions that exceeded limit with bank id: {}", accountId);
+  @Override
+  public Flux<Transaction> getExceededLimitTransactions(UUID accountId) {
+    log.debug("Fetching all transactions that exceeded limit with bank id: {}", accountId);
 
-        List<Transaction> transactionsList = transactionRepository.findAllByBankAccountIdAndLimitExceededIsTrue(accountId);
+    //    if (transactionsList.isEmpty()) {
+//      log.warn("List is empty.");
+//    }
 
-        if (transactionsList.isEmpty()) {
-            log.warn("List is empty.");
-        }
+    return transactionRepository.findAllByBankAccountIdAndLimitExceededIsTrue(accountId)
+        .switchIfEmpty(Mono.error(new NoSuchTransaction("List is empty"))).;
+  }
 
-        return transactionsList;
-    }
-
-    @Override
-    public void deleteTransaction(UUID id) {
-        Transaction transaction = transactionRepository.findByIdAndTransactionDeletedTimeIsNull(id)
-                .orElseThrow(NoSuchTransaction::new);
-
-        log.debug("Deleting transaction with id: {}", id);
-
-        transaction.setTransactionDeletedTime(LocalDateTime.now());
-        transactionRepository.save(transaction);
-
-        log.debug("Transaction with id: {} was deleted", id);
-    }
+  @Override
+  public Mono<Void> deleteTransaction(UUID id) {
+    return transactionRepository.findByIdAndTransactionDeletedTimeIsNull(id)
+        .switchIfEmpty(Mono.error(new NoSuchTransaction()))
+        .flatMap(transaction -> {
+          transaction.setTransactionDeletedTime(LocalDateTime.now());
+          return transactionRepository.save(transaction).then();
+        })
+        .doOnSuccess((v) -> log.debug("Transaction with id: {} was deleted", id));
+  }
 }

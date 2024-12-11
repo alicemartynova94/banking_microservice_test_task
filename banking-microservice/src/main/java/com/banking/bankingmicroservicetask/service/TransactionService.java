@@ -5,13 +5,15 @@ import com.banking.bankingmicroservicetask.entity.Transaction;
 
 import java.util.List;
 import java.util.UUID;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface TransactionService {
 
-    public void saveTransaction(TransactionDto transactionDto);
+    public Mono<Void> saveTransaction(TransactionDto transactionDto);
 
-    public TransactionDto getTransaction(UUID id);
-    public List<Transaction> getExceededLimitTransactions(UUID accountId);
+    public Mono<TransactionDto> getTransaction(UUID id);
+    public Flux<Transaction> getExceededLimitTransactions(UUID accountId);
 
-    public void deleteTransaction(UUID id);
+    public Mono<Void> deleteTransaction(UUID id);
 }
