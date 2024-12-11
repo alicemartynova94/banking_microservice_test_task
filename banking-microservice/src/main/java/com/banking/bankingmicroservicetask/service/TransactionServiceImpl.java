@@ -2,21 +2,20 @@ package com.banking.bankingmicroservicetask.service;
 
 import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
 import com.banking.bankingmicroservicetask.dao.TransactionRepository;
-import com.banking.bankingmicroservicetask.entity.BankAccount;
 import com.banking.bankingmicroservicetask.entity.Transaction;
 import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionSumException;
+import com.banking.bankingmicroservicetask.exceptions.InvalidTransactionTypeException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchBankAccountException;
 import com.banking.bankingmicroservicetask.exceptions.NoSuchTransaction;
 import com.banking.bankingmicroservicetask.mappers.TransactionMapper;
 import com.banking.dto.TransactionDto;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,6 +29,8 @@ public class TransactionServiceImpl implements TransactionService {
   private final BankAccountRepository bankAccountRepository;
   private final TransactionalOperator transactionalOperator;
 
+  private final Map<String, TransactionCategoryStrategy> strategies;
+
   @Autowired
   private TransactionMapper transactionMapper;
 
@@ -41,24 +42,17 @@ public class TransactionServiceImpl implements TransactionService {
       throw new InvalidTransactionSumException();
     }
 
-    BankAccount bankAccount = bankAccountRepository.findById(transactionDto.getBankAccountId())
+    return bankAccountRepository.findById(transactionDto.getBankAccountId())
         .switchIfEmpty(Mono.error(new NoSuchBankAccountException()))
-        .block();
-    Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
-
-    TransactionCategoryStrategy categoryStrategy = TransactionCategoryFactory
-        .getTransactionCategoryStrategy(transactionDto.getTransactionCategory());
-    categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
-
-    return saveTransactionAndBankAccount(transaction, bankAccount);
-  }
-
-  //    @Transactional
-  public Mono<Void> saveTransactionAndBankAccount(Transaction transaction, BankAccount bankAccount) {
-    return transactionalOperator.transactional(
-        Mono.zip(
-            transactionRepository.save(transaction),
-            bankAccountRepository.save(bankAccount))).then();
+        .flatMap(bankAccount -> {
+          Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
+          TransactionCategoryStrategy categoryStrategy = strategies.get(transactionDto.getTransactionCategory().name());
+          if (categoryStrategy == null) {
+            return Mono.error(InvalidTransactionTypeException::new);
+          }
+          return categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
+        })
+        .as(transactionalOperator::transactional);
   }
 
   @Override
@@ -72,13 +66,10 @@ public class TransactionServiceImpl implements TransactionService {
   @Override
   public Flux<Transaction> getExceededLimitTransactions(UUID accountId) {
     log.debug("Fetching all transactions that exceeded limit with bank id: {}", accountId);
-
-    //    if (transactionsList.isEmpty()) {
-//      log.warn("List is empty.");
-//    }
-
     return transactionRepository.findAllByBankAccountIdAndLimitExceededIsTrue(accountId)
-        .switchIfEmpty(Mono.error(new NoSuchTransaction("List is empty"))).;
+        .switchIfEmpty(
+            Mono.fromRunnable(() -> log.debug("No exceeded limit transactions found for accountId: {}", accountId))
+        );
   }
 
   @Override
@@ -87,8 +78,10 @@ public class TransactionServiceImpl implements TransactionService {
         .switchIfEmpty(Mono.error(new NoSuchTransaction()))
         .flatMap(transaction -> {
           transaction.setTransactionDeletedTime(LocalDateTime.now());
-          return transactionRepository.save(transaction).then();
+          return transactionRepository.save(transaction);
         })
-        .doOnSuccess((v) -> log.debug("Transaction with id: {} was deleted", id));
+        .doOnSuccess(v -> log.debug("Transaction with id: {} was deleted", id))
+        .doOnError(error -> log.error("Error occurred while deleting transaction with id: {}", id, error))
+        .then();
   }
 }
