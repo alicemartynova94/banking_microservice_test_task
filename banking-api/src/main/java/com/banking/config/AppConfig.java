@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
-
 @Configuration
 @EnableConfigurationProperties(AppConfigProperties.class)
 @RequiredArgsConstructor
@@ -21,8 +19,8 @@ public class AppConfig {
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
                 .rootUri(appConfigProperties.getBaseUrl())
-                .setConnectTimeout(Duration.ofSeconds(10))
-                .setReadTimeout(Duration.ofSeconds(15))
+                .setConnectTimeout(appConfigProperties.getConnectTimeout())
+                .setReadTimeout(appConfigProperties.getReadTimeout())
                 .build();
     }
 }
