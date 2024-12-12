@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
@@ -28,31 +27,29 @@ public class TransactionServiceImpl implements TransactionService {
   private final TransactionRepository transactionRepository;
   private final BankAccountRepository bankAccountRepository;
   private final TransactionalOperator transactionalOperator;
-
   private final Map<String, TransactionCategoryStrategy> strategies;
-
-  @Autowired
-  private TransactionMapper transactionMapper;
+  private final TransactionMapper transactionMapper;
 
   @Override
   public Mono<Void> saveTransaction(TransactionDto transactionDto) {
-    Double transactionDtoSum = transactionDto.getTransactionSum();
-
-    if (transactionDtoSum <= 0) {
-      throw new InvalidTransactionSumException();
-    }
-
-    return bankAccountRepository.findById(transactionDto.getBankAccountId())
-        .switchIfEmpty(Mono.error(new NoSuchBankAccountException()))
-        .flatMap(bankAccount -> {
-          Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
-          TransactionCategoryStrategy categoryStrategy = strategies.get(transactionDto.getTransactionCategory().name());
-          if (categoryStrategy == null) {
-            return Mono.error(InvalidTransactionTypeException::new);
-          }
-          return categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
-        })
-        .as(transactionalOperator::transactional);
+    return Mono.defer(() -> {
+      Double transactionDtoSum = transactionDto.getTransactionSum();
+      if (transactionDtoSum == null || transactionDtoSum <= 0) {
+        return Mono.error(new InvalidTransactionSumException());
+      }
+      return bankAccountRepository.findByIdAndBankAccountDeletedTimeIsNull(transactionDto.getBankAccountId())
+          .switchIfEmpty(Mono.error(new NoSuchBankAccountException()))
+          .flatMap(bankAccount -> {
+            Transaction transaction = transactionMapper.TransactionDtoToTransaction(transactionDto);
+            TransactionCategoryStrategy categoryStrategy = strategies.get(
+                transactionDto.getTransactionCategory().name());
+            if (categoryStrategy == null) {
+              return Mono.error(InvalidTransactionTypeException::new);
+            }
+            return categoryStrategy.saveTransaction(bankAccount, transaction, transactionDtoSum);
+          })
+          .as(transactionalOperator::transactional);
+    });
   }
 
   @Override
