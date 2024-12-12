@@ -1,15 +1,16 @@
 package com.banking.bankingmicroservicetask.service;
 
 import com.banking.dto.TransactionLimitDto;
-
 import java.util.UUID;
+import reactor.core.publisher.Mono;
 
 public interface TransactionLimitService {
-    public void saveLimit(TransactionLimitDto limitDto);
 
-    public TransactionLimitDto getLimit(UUID id);
+  Mono<Void> saveLimit(TransactionLimitDto limitDto);
 
-    public void updateLimit(UUID id, TransactionLimitDto transactionLimitDto);
+  Mono<TransactionLimitDto> getLimit(UUID id);
 
-    public void deleteLimit(UUID id);
+  Mono<Void> updateLimit(UUID id, TransactionLimitDto transactionLimitDto);
+
+  Mono<Void> deleteLimit(UUID id);
 }

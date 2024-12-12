@@ -1,36 +1,31 @@
 package com.banking.bankingmicroservicetask.service;
 
-
-import com.banking.bankingmicroservicetask.dao.TransactionLimitRepository;
-import com.banking.dto.TransactionLimitDto;
-import com.banking.enums.TransactionCategory;
-import com.banking.bankingmicroservicetask.entity.TransactionLimit;
-import com.banking.bankingmicroservicetask.exceptions.LimitUpdateFrequencyExceededException;
-import com.banking.bankingmicroservicetask.exceptions.LimitUpdateNotAllowedException;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.MockedStatic;
-
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.ArgumentMatchers.any;
 
+import com.banking.bankingmicroservicetask.dao.TransactionLimitRepository;
+import com.banking.bankingmicroservicetask.entity.TransactionLimit;
+import com.banking.bankingmicroservicetask.exceptions.LimitUpdateFrequencyExceededException;
+import com.banking.bankingmicroservicetask.exceptions.LimitUpdateNotAllowedException;
+import com.banking.dto.TransactionLimitDto;
+import com.banking.enums.TransactionCategory;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
-@Disabled
 @ExtendWith(MockitoExtension.class)
 class TransactionLimitServiceImplTest {
     @InjectMocks
@@ -65,40 +60,37 @@ class TransactionLimitServiceImplTest {
         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(todayFixedDate);
 
-            given(transactionLimitRepository.findByIdActiveLimit(uuid)).willReturn(Optional.of(transactionLimit));
+      given(transactionLimitRepository.findByIdAndLimitDeletedTimeIsNull(uuid))
+          .willReturn(Mono.just(transactionLimit));
+      given(transactionLimitRepository.save(any(TransactionLimit.class)))
+          .willAnswer(invocation -> Mono.just(invocation.getArgument(0)));
 
-            transactionLimit.setLimitLastUpdateTime(todayMinusMonth);
-            transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto);
-
-            verify(transactionLimitRepository, times(1)).save(transactionLimit);
-            Assertions.assertEquals(transactionLimitDto.getLimitSum(), transactionLimit.getLimitSum());
-        }
+      transactionLimit.setLimitLastUpdateTime(todayMinusMonth);
+      StepVerifier.create(transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto))
+          .verifyComplete();
+      verify(transactionLimitRepository, times(1)).save(transactionLimit);
+      Assertions.assertEquals(transactionLimitDto.getLimitSum(), transactionLimit.getLimitSum());
     }
+  }
 
-    @Test
-    void updateLimit_On15thLastUpdate2MonthTwoTimes_ExpectLimitUpdateFrequencyExceededException() {
-        LocalDateTime todayFixedDate = LocalDateTime.of(2024, 3, 15, 10, 30);
-        LocalDateTime todayMinusMonths = todayFixedDate.minusMonths(2);
+  @Test
+  void updateLimit_On15thLastUpdateSameMonth_ExpectLimitUpdateFrequencyExceededException() {
+    LocalDateTime todayFixedDate = LocalDateTime.of(2024, 3, 15, 10, 30);
 
         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(todayFixedDate);
 
-            given(transactionLimitRepository.findByIdActiveLimit(uuid)).willReturn(Optional.of(transactionLimit));
+      given(transactionLimitRepository.findByIdAndLimitDeletedTimeIsNull(uuid))
+          .willReturn(Mono.just(transactionLimit));
 
-            transactionLimit.setLimitLastUpdateTime(todayMinusMonths);
-            transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto);
-            transactionLimitDto.setLimitSum(4000.00);
-            transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto);
+      transactionLimit.setLimitLastUpdateTime(todayFixedDate);
 
-            verify(transactionLimitRepository, times(2)).save(transactionLimit);
-
-            Assertions.assertThrows(LimitUpdateFrequencyExceededException.class, () -> {
-                if (Mockito.mockingDetails(transactionLimitRepository).getInvocations().size() > 1) {
-                    throw new LimitUpdateFrequencyExceededException("You've already created limit this month.");
-                }
-            });
-        }
+      StepVerifier.create(transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto))
+          .expectError(LimitUpdateFrequencyExceededException.class)
+          .verify();
+      verify(transactionLimitRepository, never()).save(transactionLimit);
     }
+  }
 
     @Test
     void updateLimit_On17thLastUpdate1MonthOneTime_ExpectLimitUpdateNotAllowedException() {
@@ -108,14 +100,17 @@ class TransactionLimitServiceImplTest {
         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(todayWrongDate);
 
-            given(transactionLimitRepository.findByIdActiveLimit(uuid)).willReturn(Optional.of(transactionLimit));
+      given(transactionLimitRepository.findByIdAndLimitDeletedTimeIsNull(uuid)).willReturn(
+          Mono.just(transactionLimit));
 
-            transactionLimit.setLimitLastUpdateTime(updateDate);
+      transactionLimit.setLimitLastUpdateTime(updateDate);
+      StepVerifier.create(transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto))
+          .expectError(LimitUpdateNotAllowedException.class)
+          .verify();
 
-            verify(transactionLimitRepository, never()).save(any());
-            Assertions.assertThrows(LimitUpdateNotAllowedException.class, () -> transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto));
-        }
+      verify(transactionLimitRepository, never()).save(any());
     }
+  }
 
     @Test
     void updateLimit_LessThanOneMonthAgoOneTime_ExpectLimitUpdateNotAllowedException() {
@@ -125,13 +120,15 @@ class TransactionLimitServiceImplTest {
         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(todayFixedDate);
 
-            given(transactionLimitRepository.findByIdActiveLimit(uuid)).willReturn(Optional.of(transactionLimit));
+      given(transactionLimitRepository.findByIdAndLimitDeletedTimeIsNull(uuid)).willReturn(
+          Mono.just(transactionLimit));
 
-            transactionLimit.setLimitLastUpdateTime(wrongUpdateDate);
+      transactionLimit.setLimitLastUpdateTime(wrongUpdateDate);
+      StepVerifier.create(transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto))
+          .expectError(LimitUpdateNotAllowedException.class)
+          .verify();
 
-            verify(transactionLimitRepository, never()).save(any());
-            Assertions.assertThrows(LimitUpdateNotAllowedException.class, () -> transactionLimitService.updateLimit(transactionLimitDto.getId(), transactionLimitDto));
-        }
+      verify(transactionLimitRepository, never()).save(any());
     }
-
+  }
 }

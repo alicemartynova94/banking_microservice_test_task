@@ -9,6 +9,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @Slf4j
+//TODO It's not possible to completely get rid of spring-boot-starter-web,
+// because the current exception handling ExceptionHandler relies on Spring MVC
 public class BankAccountGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchBankAccountException.class)
