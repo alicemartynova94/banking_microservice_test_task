@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-// EnableR2dbcRepositories ??
 @EnableR2dbcRepositories
 @RequiredArgsConstructor
 public class ReactorConfig {
