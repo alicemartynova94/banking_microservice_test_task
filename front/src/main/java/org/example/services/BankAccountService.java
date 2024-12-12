@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class BankAccountService {
 
-    //TODO не видит бин
     private final BankAccountOpenFeignClient bankAccountOpenFeignClient;
 
     @GetMapping("/{id}")
