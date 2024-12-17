@@ -8,14 +8,15 @@
             const accountId = link.getAttribute("data-id");
 
             fetch(`/banking/accounts/detail/${accountId}`)
-                .then(response => response.text())
-                .then(html => {
-                    const detailSection = document.getElementById("detail");
-                    detailSection.innerHTML = html;
-                })
-                .catch(error => {
-                    console.error("Error loading detail:", error);
-                });
+            .then(response => response.text())
+            .then(html => {
+                const detailSection = document.getElementById("detail");
+                detailSection.innerHTML = html;
+            })
+            .catch(error => {
+                console.error("Error loading detail:", error);
+                document.getElementById("detail").innerHTML = "<p>Error loading details.</p>";
+            });
         }
     </script>
 </head>
@@ -23,23 +24,33 @@
 <header>
     <nav>
         <ul>
-            <li><a href="/banking/accounts" class="menu-button"
+            <li>
+                <a href="/banking/accounts" class="menu-button"
                    th:classappend="${tab == 'accounts' ? 'active' : ''}">
-                    Accounts</a></li>
-            <li><a href="/home" class="menu-button">Other</a></li>
+                    Accounts
+                </a>
+            </li>
+            <li>
+                <a href="/home" class="menu-button">Other</a>
+            </li>
         </ul>
     </nav>
 </header>
 <main>
     <section class="content">
+        <!-- Подключение фрагмента для списка счетов -->
         <div id="accounts"
              th:replace="${accountResult != null and !accountResult.isEmpty()}
              ? ~{accounts.html :: accountResult}
              : ~{}">
         </div>
+
+        <!-- Сообщение о пустых данных -->
         <div id="accounts-empty" th:if="${accountResult == null or accountResult.isEmpty()}">
             <p>No data available.</p>
         </div>
+
+        <!-- Блок для отображения деталей счета -->
         <div id="detail" th:if="${accountResult != null and !accountResult.isEmpty()}">
             <h2>Detail</h2>
             <p>Select an ID to view details here.</p>

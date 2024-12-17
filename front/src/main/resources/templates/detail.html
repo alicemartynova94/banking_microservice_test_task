@@ -5,10 +5,18 @@
 </head>
 <body>
 <div th:fragment="content">
-    <p><strong>ID:</strong> <span th:text="${account.id}"></span></p>
-    <p><strong>Account Number:</strong> <span th:text="${account.accountNumber}"></span></p>
-    <p><strong>Account Holder:</strong> <span th:text="${account.accountHolder}"></span></p>
-    <p><strong>Available Funds:</strong> <span th:text="${account.availableFunds}"></span></p>
+    <!-- Проверка, что данные account присутствуют -->
+    <th:block th:if="${account != null}">
+        <p><strong>ID:</strong> <span th:text="${account.id}"></span></p>
+        <p><strong>Account Number:</strong> <span th:text="${account.accountNumber}"></span></p>
+        <p><strong>Account Holder:</strong> <span th:text="${account.accountHolder}"></span></p>
+        <p><strong>Available Funds:</strong> <span th:text="${account.availableFunds}"></span></p>
+    </th:block>
+
+    <!-- Сообщение, если account пустой -->
+    <th:block th:if="${account == null}">
+        <p>No account details available.</p>
+    </th:block>
 </div>
 </body>
 </html>

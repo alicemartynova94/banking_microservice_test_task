@@ -1,5 +1,7 @@
 package com.banking.bankingmicroservicetask.entity;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.Id;
@@ -21,6 +23,7 @@ public class TransactionLimit {
     private Double limitSum;
 
     @Column("transaction_category")
+    @Enumerated(EnumType.STRING)
     private TransactionCategory transactionCategory;
 
     @CreationTimestamp

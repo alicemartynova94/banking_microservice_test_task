@@ -11,7 +11,8 @@ import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@ReactiveFeignClient(name = "banking-microservice")
+//TODO Что с url, что без него, не работает))
+@ReactiveFeignClient(name = "banking-microservice", url = "http://localhost:8085")
 public interface BankAccountOpenFeignClient extends BankAccountApi {
 
     @Override

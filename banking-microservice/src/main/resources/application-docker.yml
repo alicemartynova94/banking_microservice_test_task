@@ -1,6 +1,7 @@
 spring:
-  datasource:
-    url: r2dbc:postgresql://db_bank:5432/banking?connectionTimeZone=UTC
+  r2dbc:
+    password: MyPostYang1994@!
+    url: r2dbc:postgresql://db_bank/postgres
     username: postgres
 
 eureka:

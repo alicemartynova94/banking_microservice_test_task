@@ -17,3 +17,12 @@ databaseChangeLog:
                   type: smallint
                   constraints:
                     nullable: false
+        - insert:
+            tableName: currency_shortname
+            columns:
+              - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
+                  name: currency_name_numeric
+                  value: 840

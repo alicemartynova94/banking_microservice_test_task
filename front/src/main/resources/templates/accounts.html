@@ -6,16 +6,19 @@
         <thead>
         <tr>
             <th>№</th>
-            <th>ID</th>
+            <th>Account Number</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="account : ${accountResult}">
-            <td th:text="${account.accountNumber}"></td>
+        <tr th:each="account, iterStat : ${accountResult}">
+            <td th:text="${iterStat.count}">1</td>
+            <td th:text="${account.accountNumber}">Account Number</td>
             <td>
-                <a href="#" th:text="${account.id}"
-                   th:onclick="'updateDetail(this)'"
-                   th:data-id="${account.id}"></a>
+                <a href="#" th:data-id="${account.id}"
+                   onclick="updateDetail(this); return false;">
+                    View Details
+                </a>
             </td>
         </tr>
         </tbody>

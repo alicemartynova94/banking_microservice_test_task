@@ -3,3 +3,7 @@ spring:
     name: front
 server:
   port: 8086
+
+eureka:
+  client:
+    enabled: true

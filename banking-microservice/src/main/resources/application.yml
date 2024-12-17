@@ -2,23 +2,18 @@ server:
   port: 8085
 spring:
   main:
-    web-application-type: none
+    web-application-type: reactive
   application:
     name: banking-microservice
-  springdoc:
-    api-docs:
-      path: /api-docs
   jackson:
     time-zone: UTC
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
+    url: jdbc:postgresql://db_bank/postgres
+    user: postgres
+    password: MyPostYang1994@!
 
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: r2dbc:postgresql://localhost:5432/banking?connectionTimeZone=UTC
-    username: postgres
-    password:
   jpa:
     show-sql: true
     generate-ddl: true
@@ -29,3 +24,10 @@ spring:
     init:
       platform: postgres
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    enabled: true
+    path: /api-docs

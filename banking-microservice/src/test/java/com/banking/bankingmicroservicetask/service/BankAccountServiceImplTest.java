@@ -58,7 +58,7 @@ class BankAccountServiceImplTest {
         bankAccountDto.setAccountNumber(accountNumber);
         bankAccountDto.setAccountHolder(accountHolder);
         bankAccountDto.setAvailableFunds(availableFunds);
-        bankAccountDto.setCurrencyShortname(currencyShortnameDto);
+        bankAccountDto.setCurrencyShortnameId(currencyShortname.getId());
 
         bankAccount = new BankAccount();
         bankAccount.setId(accountId);

@@ -3,9 +3,10 @@ databaseChangeLog:
       id: create-transaction-table
       author: alicemartynova94
       preConditions:
-        - onFail: MARK_RAN
-        - tableExists:
-            tableName: transaction
+        - onFail: HALT
+        - not:
+            tableExists:
+              tableName: transaction
       changes:
         - createTable:
             tableName: transaction
@@ -13,6 +14,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: UUID
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -28,11 +30,15 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: transaction_category
-                  type: INTEGER
+                  name: transaction_deleted_time
+                  type: TIMESTAMP
                   constraints:
-                    nullable: false
-                  defaultValue: 0
+                    nullable: true
+              - column:
+                  name: transaction_category
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
               - column:
                   name: limit_exceeded
                   type: BOOLEAN
@@ -43,10 +49,22 @@ databaseChangeLog:
                   type: UUID
                   constraints:
                     nullable: false
+              - column:
+                  name: bank_account_id
+                  type: UUID
+                  constraints:
+                    nullable: false
 
         - addForeignKeyConstraint:
             baseTableName: transaction
             baseColumnNames: currency_id
             referencedTableName: currency_shortname
             referencedColumnNames: id
-            constraintName: transaction_currency_shortname_id_cm
+            constraintName: transaction_currency_shortname_id_fk
+
+        - addForeignKeyConstraint:
+            baseTableName: transaction
+            baseColumnNames: bank_account_id
+            referencedTableName: bank_account
+            referencedColumnNames: id
+            constraintName: transaction_bank_account_id_fk
