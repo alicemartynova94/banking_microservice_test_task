@@ -1,48 +1,37 @@
 package org.example.services;
 
+
+import com.banking.BankAccountClient;
 import com.banking.dto.BankAccountDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.FileSystemNotFoundException;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 @Service
+@RequiredArgsConstructor
 public class BankAccountService {
 
-    private final List<BankAccountDto> dtos = new ArrayList<>();
+    private final BankAccountClient bankAccountClient;
 
     public List<BankAccountDto> getAll() {
-        if (dtos.isEmpty()) {
-            IntStream.range(1, 15).forEach(id -> {
-                var bankAccountDto = temporaryAccount(id);
-                dtos.add(bankAccountDto);
-            });
-        }
-        return dtos;
+        return bankAccountClient.getAllAccounts();
     }
 
-    public BankAccountDto getById(String id){
-        return dtos.stream()
-                .filter(a-> a.getId().toString().equals(id))
-                .findFirst()
-                .orElseThrow(()-> new FileSystemNotFoundException("error"));
+    public BankAccountDto getById(String id) {
+        UUID uuidId = UUID.fromString(id);
+        return bankAccountClient.getAccount(uuidId);
     }
 
-    private BankAccountDto temporaryAccount(Integer id) {
-        Random random = new Random();
-        int monthIndex = random.nextInt(Month.values().length);
-        Month randomMonth = Month.values()[monthIndex];
-        return BankAccountDto.builder()
-                .id(UUID.randomUUID())
-                .accountHolder(randomMonth.toString())
-                .availableFunds(random.nextDouble())
-                .accountNumber(id)
-                .build();
+    public BankAccountDto save(BankAccountDto dto) {
+        return bankAccountClient.addNewAccount(dto);
+    }
+
+    public void deleteAccount(String id) {
+        UUID uuidId = UUID.fromString(id);
+        bankAccountClient.deleteAccount(uuidId);
     }
 
 }
+
