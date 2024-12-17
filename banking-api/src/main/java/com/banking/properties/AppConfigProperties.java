@@ -11,7 +11,6 @@ import java.time.Duration;
 
 @Data
 @Validated
-@Component
 @ConfigurationProperties(prefix = "app.config")
 public class AppConfigProperties {
     @NotBlank(message = "Root url cannot be blank.")
