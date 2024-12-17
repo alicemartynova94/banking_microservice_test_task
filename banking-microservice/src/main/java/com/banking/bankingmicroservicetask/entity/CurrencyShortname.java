@@ -1,18 +1,19 @@
 package com.banking.bankingmicroservicetask.entity;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
 @Data
+@Table("currency_shortname")
 public class CurrencyShortname {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @NotNull
     private UUID id;
-    @Column(name = "currency_name_numb")
+    @Column("currency_name_numeric")
     private Short currencyNameNumeric;
 }

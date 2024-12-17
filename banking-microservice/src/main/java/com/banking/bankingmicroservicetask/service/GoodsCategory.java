@@ -1,26 +1,25 @@
 package com.banking.bankingmicroservicetask.service;
 
+import com.banking.bankingmicroservicetask.dao.BankAccountRepository;
+import com.banking.bankingmicroservicetask.dao.TransactionRepository;
 import com.banking.bankingmicroservicetask.entity.BankAccount;
-import com.banking.bankingmicroservicetask.entity.Transaction;
+import java.util.function.BiConsumer;
+import org.springframework.stereotype.Component;
 
-public class GoodsCategory implements TransactionCategoryStrategy {
+@Component("GOODS")
+public class GoodsCategory extends TransactionCategoryStrategy {
 
-    @Override
-    public void saveTransaction(BankAccount bankAccount, Transaction transaction, Double transactionDtoSum) {
-        Double limitGoods = bankAccount.getLimitGoods();
-        Double accountAvailableFunds = bankAccount.getAvailableFunds();
+  public GoodsCategory(TransactionRepository transactionRepository, BankAccountRepository bankAccountRepository) {
+    super(transactionRepository, bankAccountRepository);
+  }
 
-        if (transactionDtoSum <= limitGoods) {
-            limitGoods -= transactionDtoSum;
-            bankAccount.setLimitGoods(limitGoods);
-            bankAccount.setAvailableFunds(accountAvailableFunds - transactionDtoSum);
-            bankAccount.getTransaction().add(transaction);
-            transaction.setLimitExceeded(false);
-        } else {
-            transaction.setLimitExceeded(true);
-            System.out.println("This transaction will be saved to your transactions' history but " +
-                    "won't be performed due to your limit policy");
-        }
-    }
+  @Override
+  protected Double getLimit(BankAccount bankAccount) {
+    return bankAccount.getLimitGoods();
+  }
 
+  @Override
+  protected BiConsumer<BankAccount, Double> getLimitSetter() {
+    return BankAccount::setLimitGoods;
+  }
 }

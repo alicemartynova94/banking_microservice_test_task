@@ -1,30 +1,32 @@
 package com.banking.api;
 
 import com.banking.dto.BankAccountDto;
-import java.util.List;
 import java.util.UUID;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import reactivefeign.spring.config.ReactiveFeignClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-@FeignClient(name = "banking-microservice")
+//TODO Что с url, что без него, не работает))
+@ReactiveFeignClient(name = "banking-microservice", url = "http://localhost:8085")
 public interface BankAccountOpenFeignClient extends BankAccountApi {
 
     @Override
     @GetMapping("/api/accounts/{id}")
-    BankAccountDto getAccount(@PathVariable("id") UUID id);
+    Mono<BankAccountDto> getAccount(@PathVariable("id") UUID id);
 
     @GetMapping("/api/accounts")
-    List<BankAccountDto> getAll();
+    Flux<BankAccountDto> getAll();
 
     @Override
     @PostMapping("/api/accounts")
-    BankAccountDto addNewAccount(@RequestBody BankAccountDto bankAccountDto);
+    Mono<Void> addNewAccount(@RequestBody BankAccountDto bankAccountDto);
 
     @Override
     @DeleteMapping("/api/accounts/{id}")
-    void deleteAccount(@PathVariable("id") UUID id);
+    Mono<Void> deleteAccount(@PathVariable("id") UUID id);
 }

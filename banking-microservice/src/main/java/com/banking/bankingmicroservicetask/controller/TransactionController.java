@@ -11,8 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -41,7 +40,7 @@ public class TransactionController {
             @ApiResponse(responseCode = "400", description = "Invalid transaction data.")
     })
     @GetMapping("/transaction/{id}")
-    public TransactionDto getTransaction(@Parameter(
+    public Mono<TransactionDto> getTransaction(@Parameter(
             description = "ID of the transaction to be retrieved.",
             required = true)
                                          @PathVariable UUID id) {
@@ -56,7 +55,7 @@ public class TransactionController {
                     content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Transaction.class))))
     })
     @GetMapping("/transactions/{accountId}")
-    public List<Transaction> getExceededLimitTransactions(@Parameter(
+    public Flux<Transaction> getExceededLimitTransactions(@Parameter(
             description = "ID of the bank account to retrieve transactions.",
             required = true)
                                                           @PathVariable UUID accountId) {
@@ -70,9 +69,8 @@ public class TransactionController {
             @ApiResponse(responseCode = "400", description = "Invalid transaction data. Transaction is not found.")
     })
     @PostMapping("/transactions")
-    public TransactionDto addNewTransaction(@Valid @RequestBody TransactionDto transactionDto) {
-        transactionService.saveTransaction(transactionDto);
-        return transactionDto;
+    public Mono<Void> addNewTransaction(@Valid @RequestBody TransactionDto transactionDto) {
+        return transactionService.saveTransaction(transactionDto);
     }
 
     @Operation(summary = "Delete a transaction",
@@ -82,11 +80,11 @@ public class TransactionController {
             @ApiResponse(responseCode = "404", description = "Transaction is not found.")
     })
     @DeleteMapping("/transaction/{id}")
-    public void deleteTransaction(@Parameter(
+    public Mono<Void> deleteTransaction(@Parameter(
             description = "ID of the transaction to be deleted.",
             required = true)
                                   @PathVariable UUID id) {
-        transactionService.deleteTransaction(id);
+        return transactionService.deleteTransaction(id);
     }
 
 }

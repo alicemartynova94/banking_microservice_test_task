@@ -19,7 +19,7 @@ public class BankAccountDto {
     private Integer accountNumber;
     private String accountHolder;
     private Double availableFunds;
-    private CurrencyShortnameDto currencyShortname;
-    private TransactionLimitDto transactionLimitGoods;
-    private TransactionLimitDto transactionLimitServices;
+    private UUID currencyShortnameId;
+    private UUID transactionLimitGoodsId;
+    private UUID transactionLimitServicesId;
 }

@@ -1,46 +1,38 @@
 package com.banking.bankingmicroservicetask.entity;
 
 import com.banking.enums.TransactionCategory;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
 @Data
+@Table("transaction")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @NotNull
     private UUID id;
-    @Column(name = "transaction_sum")
+    @Column("transaction_sum")
     @NotNull
     private Double transactionSum;
     @CreationTimestamp
-    @Column(name = "time_of_transaction")
+    @Column("time_of_transaction")
     private LocalDateTime timeOfTransaction;
-    @Column(name = "transaction_deleted_time")
+    @Column("transaction_deleted_time")
     private LocalDateTime transactionDeletedTime;
-    @Column(name = "transaction_category")
+    @Column("transaction_category")
     private TransactionCategory transactionCategory;
-    @Column(name = "limit_exceeded")
+    @Column("limit_exceeded")
     private Boolean limitExceeded;
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "currency_id")
+    @Column("currency_id")
     @NotNull
-    private CurrencyShortname currencyShortname;
-    @Column(name = "bank_account_id")
+    private UUID currencyShortnameId;
+    @Column("bank_account_id")
     @NotNull
     private UUID bankAccountId;
 }

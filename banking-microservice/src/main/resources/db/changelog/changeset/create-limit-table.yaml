@@ -3,9 +3,10 @@ databaseChangeLog:
       id: create-transaction-limit
       author: alicemartynova94
       preConditions:
-        - onFail: MARK_RAN
-        - tableExists:
-            tableName: transaction_limit
+        - onFail: HALT
+        - not:
+            tableExists:
+              tableName: transaction_limit
       changes:
         - createTable:
             tableName: transaction_limit
@@ -13,18 +14,37 @@ databaseChangeLog:
               - column:
                   name: id
                   type: UUID
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: limit_sum
                   type: double
+                  defaultValueNumeric: '1000.00'
                   constraints:
                     nullable: false
-                    defaultValueNumeric: '1000.00'
+              - column:
+                  name: transaction_category
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: limit_creation_time
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
               - column:
                   name: limit_last_update_time
                   type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: limit_deleted_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
               - column:
                   name: currency_id
                   type: UUID

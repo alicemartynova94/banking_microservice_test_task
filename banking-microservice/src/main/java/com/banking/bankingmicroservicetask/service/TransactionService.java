@@ -1,17 +1,17 @@
 package com.banking.bankingmicroservicetask.service;
 
-import com.banking.dto.TransactionDto;
 import com.banking.bankingmicroservicetask.entity.Transaction;
-
-import java.util.List;
+import com.banking.dto.TransactionDto;
 import java.util.UUID;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface TransactionService {
 
-    public void saveTransaction(TransactionDto transactionDto);
+    Mono<Void> saveTransaction(TransactionDto transactionDto);
 
-    public TransactionDto getTransaction(UUID id);
-    public List<Transaction> getExceededLimitTransactions(UUID accountId);
+    Mono<TransactionDto> getTransaction(UUID id);
+    Flux<Transaction> getExceededLimitTransactions(UUID accountId);
 
-    public void deleteTransaction(UUID id);
+    Mono<Void> deleteTransaction(UUID id);
 }
