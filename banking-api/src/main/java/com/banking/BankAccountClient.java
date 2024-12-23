@@ -4,7 +4,7 @@ import com.banking.api.BankAccountApi;
 import com.banking.dto.BankAccountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,6 +23,7 @@ public class BankAccountClient implements BankAccountApi {
     }
 
     @Override
+    @GetMapping("/accounts")
     public List<BankAccountDto> getAllAccounts() {
         ResponseEntity<BankAccountDto[]> response = restTemplate.getForEntity(
                 "/accounts",
