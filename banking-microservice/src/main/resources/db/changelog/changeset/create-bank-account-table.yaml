@@ -1,11 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: create-bank-account
+      id: create-bank-account-table
       author: alicemartynova94
-      preConditions:
-        - onFail: MARK_RAN
-        - tableExists:
-            tableName: bank_account
       changes:
         - createTable:
             tableName: bank_account
@@ -32,16 +28,41 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: account_deleted_time
+                  type: TIMESTAMP
+              - column:
                   name: currency_shortname_id
                   type: uuid
                   constraints:
                     nullable: false
+              - column:
+                  name: limit_goods_id
+                  type: UUID
+              - column:
+                  name: limit_goods
+                  type: DOUBLE
+              - column:
+                  name: limit_services_id
+                  type: UUID
+              - column:
+                  name: limit_services
+                  type: DOUBLE
 
         - addForeignKeyConstraint:
             baseTableName: bank_account
             baseColumnNames: currency_shortname_id
             referencedTableName: currency_shortname
             referencedColumnNames: id
-            constraintName: bank_account_currency_shortname_id_cm
-            onDelete: cascade
-            onUpdate: cascade
+            constraintName: bank_account_currency_shortname_id
+        - addForeignKeyConstraint:
+            baseTableName: bank_account
+            baseColumnNames: limit_goods_id
+            referencedTableName: transaction_limit
+            referencedColumnNames: id
+            constraintName: bank_account_limit_goods_id
+        - addForeignKeyConstraint:
+            baseTableName: bank_account
+            baseColumnNames: limit_services_id
+            referencedTableName: transaction_limit
+            referencedColumnNames: id
+            constraintName: bank_account_limit_services_id

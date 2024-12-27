@@ -1,11 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: create-transaction-limit
+      id: create-transaction-limit-table
       author: alicemartynova94
-      preConditions:
-        - onFail: MARK_RAN
-        - tableExists:
-            tableName: transaction_limit
       changes:
         - createTable:
             tableName: transaction_limit
@@ -23,7 +19,18 @@ databaseChangeLog:
                     nullable: false
                     defaultValueNumeric: '1000.00'
               - column:
+                  name: transaction_category
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: limit_creation_time
+                  type: TIMESTAMP
+              - column:
                   name: limit_last_update_time
+                  type: TIMESTAMP
+              - column:
+                  name: limit_deleted_time
                   type: TIMESTAMP
               - column:
                   name: currency_id
@@ -35,5 +42,5 @@ databaseChangeLog:
             baseColumnNames: currency_id
             referencedTableName: currency_shortname
             referencedColumnNames: id
-            constraintName: transaction_limit_currency_shortname_id_cm
+            constraintName: transaction_limit_currency_shortname_id
 
