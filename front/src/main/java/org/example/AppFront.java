@@ -4,14 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.ComponentScan;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 @Slf4j
 @SpringBootApplication
-@EnableReactiveFeignClients(basePackages = "com.banking.api")
+@EnableReactiveFeignClients
 @EnableDiscoveryClient
-@ComponentScan(basePackages = "com.banking.api")
 public class AppFront {
 
     public static final String SERVICE_NAME = "banking-front";

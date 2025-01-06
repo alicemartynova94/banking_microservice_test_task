@@ -1,32 +1,31 @@
 package com.banking.api;
 
 import com.banking.dto.BankAccountDto;
+import feign.Headers;
+import feign.Param;
+import feign.RequestLine;
 import java.util.UUID;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-//TODO Что с url, что без него, не работает))
-@ReactiveFeignClient(name = "banking-microservice", url = "http://localhost:8085")
+@ReactiveFeignClient(name = "banking-microservice")
 public interface BankAccountOpenFeignClient extends BankAccountApi {
 
     @Override
-    @GetMapping("/api/accounts/{id}")
-    Mono<BankAccountDto> getAccount(@PathVariable("id") UUID id);
+    @RequestLine("GET /api/accounts/{id}")
+    Mono<BankAccountDto> getAccount(@Param("id") UUID id);
 
-    @GetMapping("/api/accounts")
+    @RequestLine("GET /api/accounts")
     Flux<BankAccountDto> getAll();
 
     @Override
-    @PostMapping("/api/accounts")
+    @RequestLine("POST /api/accounts")
+    @Headers("Content-Type: application/json")
     Mono<Void> addNewAccount(@RequestBody BankAccountDto bankAccountDto);
 
     @Override
-    @DeleteMapping("/api/accounts/{id}")
-    Mono<Void> deleteAccount(@PathVariable("id") UUID id);
+    @RequestLine("DELETE /api/accounts/{id}")
+    Mono<Void> deleteAccount(@Param("id") UUID id);
 }

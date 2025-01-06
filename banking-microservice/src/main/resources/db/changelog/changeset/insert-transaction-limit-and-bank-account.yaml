@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-transaction-limit-and-bank-account
+      author: kvansipto
+      changes:
+        - sql:
+            comment: "Adding rows into transaction_limit and bank_account with currency_shortname id"
+            splitStatements: false
+            sql: |
+              DO $$
+              DECLARE
+                currency_id UUID;
+              BEGIN
+                SELECT id INTO currency_id FROM currency_shortname WHERE currency_name_numeric = 840;
+
+                INSERT INTO transaction_limit (id, limit_sum, transaction_category, limit_creation_time, limit_last_update_time, limit_deleted_time, currency_id)
+                VALUES
+                  (gen_random_uuid(), 5000, 'GOODS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, currency_id),
+                  (gen_random_uuid(), 5000, 'SERVICES', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, currency_id);
+
+                INSERT INTO bank_account (id, account_number, account_holder, available_funds, account_deleted_time, currency_shortname_id, limit_goods_id, limit_services_id, limit_goods, limit_services)
+                VALUES
+                  (gen_random_uuid(), 12345678, 'Anton Zhdanok', 10000.00, NULL, currency_id, 
+                   (SELECT id FROM transaction_limit WHERE transaction_category = 'GOODS' LIMIT 1),
+                   (SELECT id FROM transaction_limit WHERE transaction_category = 'SERVICES' LIMIT 1),
+                   5000, 5000);
+              END $$;

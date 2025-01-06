@@ -7,3 +7,6 @@ server:
 eureka:
   client:
     enabled: true
+
+service:
+  name: BANKING-MICROSERVICE
