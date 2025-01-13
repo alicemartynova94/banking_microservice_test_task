@@ -7,10 +7,14 @@ spring:
     name: banking-microservice
   jackson:
     time-zone: UTC
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/banking
+    password: MyPostYang1994@!
+    username: postgres
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    url: jdbc:postgresql://db_bank/postgres
+    url: jdbc:postgresql://localhost:5432/banking
     user: postgres
     password: MyPostYang1994@!
 
@@ -23,6 +27,11 @@ spring:
   sql:
     init:
       platform: postgres
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
 springdoc:
   swagger-ui:
