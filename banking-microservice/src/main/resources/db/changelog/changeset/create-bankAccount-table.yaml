@@ -3,9 +3,10 @@ databaseChangeLog:
       id: create-bank-account
       author: alicemartynova94
       preConditions:
-        - onFail: MARK_RAN
-        - tableExists:
-            tableName: bank_account
+        - onFail: HALT
+        - not:
+            tableExists:
+              tableName: bank_account
       changes:
         - createTable:
             tableName: bank_account
@@ -13,6 +14,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: uuid
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -32,8 +34,35 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: account_deleted_time
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
                   name: currency_shortname_id
                   type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: limit_goods_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: limit_services_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: limit_goods
+                  type: double
+                  defaultValue: 1000.0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: limit_services
+                  type: double
+                  defaultValue: 1000.0
                   constraints:
                     nullable: false
 
@@ -42,6 +71,24 @@ databaseChangeLog:
             baseColumnNames: currency_shortname_id
             referencedTableName: currency_shortname
             referencedColumnNames: id
-            constraintName: bank_account_currency_shortname_id_cm
+            constraintName: fk_bank_account_currency_shortname
             onDelete: cascade
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: bank_account
+            baseColumnNames: limit_goods_id
+            referencedTableName: transaction_limit
+            referencedColumnNames: id
+            constraintName: fk_bank_account_limit_goods
+            onDelete: restrict
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: bank_account
+            baseColumnNames: limit_services_id
+            referencedTableName: transaction_limit
+            referencedColumnNames: id
+            constraintName: fk_bank_account_limit_services
+            onDelete: restrict
             onUpdate: cascade

@@ -1,11 +1,10 @@
 package com.banking.bankingmicroservicetask.dao;
 
 import com.banking.bankingmicroservicetask.entity.BankAccount;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Mono;
 
-public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> {
-    Optional<BankAccount> findByIdAndBankAccountDeletedTimeIsNull(UUID id);
+public interface BankAccountRepository extends ReactiveCrudRepository<BankAccount, UUID> {
+    Mono<BankAccount> findByIdAndBankAccountDeletedTimeIsNull(UUID id);
 }

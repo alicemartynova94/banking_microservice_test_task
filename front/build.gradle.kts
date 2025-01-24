@@ -31,6 +31,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("com.playtika.reactivefeign:feign-reactor-webclient:4.2.1")
 
     implementation("com.banking:banking-api:0.1.0-SNAPSHOT")
 

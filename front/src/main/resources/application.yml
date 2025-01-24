@@ -3,3 +3,12 @@ spring:
     name: front
 server:
   port: 8086
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+service:
+  name: BANKING-MICROSERVICE
