@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.banking")
 public class AppFront {
 
     public static final String SERVICE_NAME = "banking-front";
