@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-currency-shortname
+      id: create-currency-shortname-table
       author: alicemartynova94
       changes:
         - createTable:
@@ -13,7 +13,5 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: currency_name_numeric
+                  name: currency_name_numb
                   type: smallint
-                  constraints:
-                    nullable: false

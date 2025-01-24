@@ -2,10 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: create-transaction-table
       author: alicemartynova94
-      preConditions:
-        - onFail: MARK_RAN
-        - tableExists:
-            tableName: transaction
       changes:
         - createTable:
             tableName: transaction
@@ -24,9 +20,9 @@ databaseChangeLog:
               - column:
                   name: time_of_transaction
                   type: TIMESTAMP
-                  defaultValueComputed: CURRENT_TIMESTAMP
-                  constraints:
-                    nullable: false
+              - column:
+                  name: transaction_deleted_time
+                  type: TIMESTAMP
               - column:
                   name: transaction_category
                   type: INTEGER
@@ -43,10 +39,21 @@ databaseChangeLog:
                   type: UUID
                   constraints:
                     nullable: false
+              - column:
+                  name: bank_account_id
+                  type: UUID
+                  constraints:
+                    nullable: false
 
         - addForeignKeyConstraint:
             baseTableName: transaction
             baseColumnNames: currency_id
             referencedTableName: currency_shortname
             referencedColumnNames: id
-            constraintName: transaction_currency_shortname_id_cm
+            constraintName: transaction_currency_shortname_id
+        - addForeignKeyConstraint:
+            baseTableName: transaction
+            baseColumnNames: bank_account_id
+            referencedTableName: bank_account
+            referencedColumnNames: id
+            constraintName: transaction_bank_account_id
